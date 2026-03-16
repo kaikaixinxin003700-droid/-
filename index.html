@@ -1,104 +1,10 @@
-<!DOCTYPE html>
-<html lang="zh">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>注塑工艺数字化看板 · 安全版</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <style>
-        /* 这里保留你原本的所有 CSS 样式不变 */
-        :root {
-            --primary: #0052d9;
-            --danger: #d9001b;
-            --success: #00a854;
-            --warning: #ffa940;
-            --bg: #f4f7f6;
-            --border: #e8e8e8;
-            --text: #262626;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
-            color: var(--text);
-            line-height: 1.6;
-        }
-        /* ... 篇幅原因，中间的样式请保留你文件中的原样 ... */
-        .machine-tag {
-            background: var(--primary);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1><i class="fas fa-microchip"></i> <span id="titleText">注塑工艺数字化看板</span></h1>
-            <div style="margin-top: 10px;">
-                <span class="machine-tag" id="machineId">加载中...</span>
-            </div>
-        </div>
 
-        <div id="content">
-            </div>
-    </div>
-
-    <script>
-        /************************************************
-         * 1. 新增：URL参数动态解析逻辑 (放在最前面执行)
-         ************************************************/
-        window.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const machineIdFromUrl = urlParams.get('id');
-            const machineTag = document.getElementById('machineId');
-            
-            if (machineIdFromUrl && machineTag) {
-                // 如果网址有 ?id=A02，则显示 A02 号机
-                machineTag.innerText = machineIdFromUrl + " 号机";
-                window.currentMachineId = machineIdFromUrl; 
-            } else if (machineTag) {
-                machineTag.innerText = "默认机台";
-            }
-        });
-
-        /************************************************
-         * 2. 你原有的配置和逻辑 (保持不变)
-         ************************************************/
-        const CONFIG = {
-            serverChanKey: 'SCT312972Tjk8P663lIBdPdOesYvNJpWb3',
-            AIRTABLE_PAT: 'patB05Ub4HT+.5e40...', // 此处请检查并填入你完整的 PAT
-            AIRTABLE_BASE_ID: 'app...',
-            AIRTABLE_TABLE_NAME: 'Feedback',
-            EMAILJS_SERVICE_ID: 'service_vbt...',
-            EMAILJS_TEMPLATE_ID: 'template_07...',
-            EMAILJS_PUBLIC_KEY: 'rY-vF...'
-        };
-
-        // 后面是你原有的所有函数：updateUserStatus, sendFeedback, t(语言包) 等等
-        // 请确保把原本 <script> 标签内剩下的所有代码都接在下面
-        
-        // ... 原有代码逻辑 ...
-        
-        function sendFeedback() {
-            // 在发送反馈时，可以利用上面获取到的 window.currentMachineId
-            const machine = window.currentMachineId || '未知';
-            console.log("正在提交机台反馈：" + machine);
-            // ... 原有提交逻辑
-        }
-
-    </script>
-</body>
 </html><!DOCTYPE html>
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>注塑工艺数字化看板 · 安全版</title>
+    <title>注塑工艺数字化看板 · </title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
