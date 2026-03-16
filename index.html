@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>注塑工艺数字化看板 · 安全版</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <style>
+        /* 这里保留你原本的所有 CSS 样式不变 */
+        :root {
+            --primary: #0052d9;
+            --danger: #d9001b;
+            --success: #00a854;
+            --warning: #ffa940;
+            --bg: #f4f7f6;
+            --border: #e8e8e8;
+            --text: #262626;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        /* ... 篇幅原因，中间的样式请保留你文件中的原样 ... */
+        .machine-tag {
+            background: var(--primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-microchip"></i> <span id="titleText">注塑工艺数字化看板</span></h1>
+            <div style="margin-top: 10px;">
+                <span class="machine-tag" id="machineId">加载中...</span>
+            </div>
+        </div>
+
+        <div id="content">
+            </div>
+    </div>
+
+    <script>
+        /************************************************
+         * 1. 新增：URL参数动态解析逻辑 (放在最前面执行)
+         ************************************************/
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const machineIdFromUrl = urlParams.get('id');
+            const machineTag = document.getElementById('machineId');
+            
+            if (machineIdFromUrl && machineTag) {
+                // 如果网址有 ?id=A02，则显示 A02 号机
+                machineTag.innerText = machineIdFromUrl + " 号机";
+                window.currentMachineId = machineIdFromUrl; 
+            } else if (machineTag) {
+                machineTag.innerText = "默认机台";
+            }
+        });
+
+        /************************************************
+         * 2. 你原有的配置和逻辑 (保持不变)
+         ************************************************/
+        const CONFIG = {
+            serverChanKey: 'SCT312972Tjk8P663lIBdPdOesYvNJpWb3',
+            AIRTABLE_PAT: 'patB05Ub4HT+.5e40...', // 此处请检查并填入你完整的 PAT
+            AIRTABLE_BASE_ID: 'app...',
+            AIRTABLE_TABLE_NAME: 'Feedback',
+            EMAILJS_SERVICE_ID: 'service_vbt...',
+            EMAILJS_TEMPLATE_ID: 'template_07...',
+            EMAILJS_PUBLIC_KEY: 'rY-vF...'
+        };
+
+        // 后面是你原有的所有函数：updateUserStatus, sendFeedback, t(语言包) 等等
+        // 请确保把原本 <script> 标签内剩下的所有代码都接在下面
+        
+        // ... 原有代码逻辑 ...
+        
+        function sendFeedback() {
+            // 在发送反馈时，可以利用上面获取到的 window.currentMachineId
+            const machine = window.currentMachineId || '未知';
+            console.log("正在提交机台反馈：" + machine);
+            // ... 原有提交逻辑
+        }
+
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>注塑工艺数字化看板 · 安全版</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <style>
+        /* 样式与之前完全一致，为节省篇幅此处省略，实际使用时保留原样 */
+        :root {
+            --primary: #0052d9;
+            --danger: #d9001b;
+            --success: #00a854;
+            --warning: #ffa940;
+            --bg: #f4f7f6;
+            --border: #e8e8e8;
+            --text: #262626;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            min-height: 100vh;
+            padding: 15px;
+            color: var(--text);
+            -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
+            -webkit-touch-callout: none;
+            position: relative;
+        }
+        input, textarea, [contenteditable="true"] { -webkit-user-select: auto !important; -moz-user-select: auto !important; -ms-user-select: auto !important; user-select: auto !important; }
+        .container {
+            max-width: 520px; margin: 0 auto; background: white; border-radius: 16px; padding: 25px;
+            box-shadow: 0 6px 24px rgba(0, 82, 217, 0.12); border: 1px solid rgba(0, 82, 217, 0.1);
+            position: relative; z-index: 2; background-color: rgba(255,255,255,0.98); backdrop-filter: blur(1px);
+        }
+        #watermark-layer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999;
+            display: flex; flex-wrap: wrap; justify-content: space-around; align-items: center;
+            transform: rotate(-25deg) scale(1.2); opacity: 0.18; font-size: 18px; font-weight: 500;
+            color: #2c3e50; text-transform: uppercase; white-space: nowrap; font-family: monospace; letter-spacing: 2px;
+        }
+        .watermark-item {
+            margin: 30px 20px; padding: 5px 15px; background: transparent; border: 1px dashed rgba(0,82,217,0.2);
+            color: #003a8c; box-shadow: 0 0 0 1px rgba(255,255,255,0.3); border-radius: 40px; backdrop-filter: blur(2px);
+        }
+        .header { text-align: center; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid #f0f5ff; }
+        h1 { color: var(--primary); font-size: 22px; margin-bottom: 10px; }
+        h1 i { margin-right: 10px; }
+        .machine-info { display: flex; justify-content: center; gap: 10px; align-items: center; margin-top: 10px; }
+        .machine-tag { background: linear-gradient(135deg, var(--primary), #0066ff); color: white; padding: 6px 15px; border-radius: 20px; font-weight: bold; font-size: 14px; box-shadow: 0 2px 8px rgba(0, 82, 217, 0.2); }
+        .status { display: inline-flex; align-items: center; gap: 6px; background: #f0f9ff; color: var(--primary); padding: 4px 12px; border-radius: 15px; font-size: 13px; border: 1px solid #bae0ff; }
+        .status-dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: var(--text); }
+        label i { color: var(--primary); margin-right: 6px; }
+        select {
+            width: 100%; padding: 14px; border: 2px solid var(--border); border-radius: 10px; font-size: 15px;
+            background: white; transition: all 0.3s; cursor: pointer; appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 15px center; background-size: 16px;
+        }
+        select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 82, 217, 0.1); }
+        select:disabled { background-color: #f8f9fa; cursor: not-allowed; opacity: 0.7; }
+        .hint { font-size: 12px; color: #666; margin-top: 5px; display: block; }
+        .btn {
+            width: 100%; padding: 16px; border: none; border-radius: 10px; font-size: 16px; font-weight: 600;
+            cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), #0066ff); color: white; box-shadow: 0 4px 14px rgba(0, 82, 217, 0.3); margin-top: 10px; }
+        .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 82, 217, 0.4); }
+        .btn-primary:disabled { background: #cce4ff; cursor: not-allowed; transform: none; box-shadow: none; }
+        .btn-feedback { background: linear-gradient(135deg, #ffa940, #ff7a00); color: white; margin-top: 15px; }
+        .btn-lang { 
+            background: white; color: var(--primary); border: 1px solid var(--primary); 
+            padding: 8px 16px; border-radius: 30px; font-size: 14px; cursor: pointer; 
+            display: inline-flex; align-items: center; gap: 5px; margin-top: 5px;
+        }
+        .btn-lang:hover { background: #f0f7ff; }
+        .param-section { background: #f8fbff; border-radius: 10px; padding: 20px; margin-top: 20px; border: 1px solid #e8f1ff; display: none; }
+        .param-section.show { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .section-title { color: var(--primary); font-size: 16px; font-weight: 600; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #e8f1ff; display: flex; align-items: center; gap: 8px; }
+        .param-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
+        .param-item { display: flex; flex-direction: column; }
+        .param-label { font-size: 12px; color: #666; margin-bottom: 4px; }
+        .param-value { background: white; padding: 10px; border-radius: 6px; border: 1px solid var(--border); font-weight: 600; font-size: 14px; }
+        .param-value.important { background: #fff2f0; color: var(--danger); border-color: #ffccc7; }
+        .param-value.warning { background: #fffbe6; color: var(--warning); border-color: #ffe58f; }
+        .param-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 13px; }
+        .param-table th, .param-table td { border: 1px solid var(--border); padding: 10px; text-align: center; }
+        .param-table th { background: #f0f7ff; color: var(--text); font-weight: 600; }
+        .footer { text-align: center; margin-top: 25px; padding-top: 15px; border-top: 1px solid var(--border); font-size: 12px; color: #666; }
+        .user-status { margin-top: 10px; font-size: 13px; }
+        .login-link { color: var(--primary); cursor: pointer; text-decoration: underline; }
+        @media (max-width: 480px) {
+            .container { padding: 20px 15px; border-radius: 12px; }
+            h1 { font-size: 20px; }
+            .param-grid { grid-template-columns: 1fr; gap: 10px; }
+            .param-table { font-size: 12px; }
+            .param-table th, .param-table td { padding: 8px 5px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 防截屏水印层 -->
+    <div id="watermark-layer"></div>
+
+    <div class="container">
+        <!-- 头部增加语言切换 -->
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
+            <button class="btn-lang" id="langSwitchBtn"><i class="fas fa-language"></i> <span>Tiếng Việt</span></button>
+        </div>
+
+        <!-- 头部 -->
+        <div class="header">
+            <h1><i class="fas fa-industry"></i> <span data-i18n="title">注塑工艺数字化看板</span></h1>
+            <div class="machine-info">
+                <span class="machine-tag" id="machineId">加载中...</span>
+                <span class="status">
+                    <span class="status-dot"></span>
+                    <span data-i18n="online">在线</span>
+                </span>
+            </div>
+        </div>
+        
+        <!-- 选择区域 -->
+        <div class="form-group">
+            <label><i class="fas fa-cube"></i> <span data-i18n="product_label">1. 选择产品名称</span></label>
+            <select id="productSelect">
+                <option value="" data-i18n="product_placeholder">请选择产品</option>
+            </select>
+            <span class="hint" data-i18n="product_hint">选择产品后会自动匹配材料</span>
+        </div>
+        
+        <div class="form-group">
+            <label><i class="fas fa-flask"></i> <span data-i18n="material_label">2. 选择材料</span></label>
+            <select id="materialSelect" disabled>
+                <option value="" data-i18n="material_placeholder">请先选择产品</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label><i class="fas fa-tools"></i> <span data-i18n="mold_label">3. 选择模具号</span></label>
+            <select id="moldSelect" disabled>
+                <option value="" data-i18n="mold_placeholder">请先选择材料</option>
+            </select>
+            <span class="hint" data-i18n="mold_hint">同一产品材料可能有多个模具号</span>
+        </div>
+        
+        <!-- 查看参数按钮 -->
+        <button class="btn btn-primary" id="viewParamsBtn" disabled>
+            <i class="fas fa-search"></i> <span data-i18n="view_params">查看完整工艺参数</span>
+        </button>
+        
+        <!-- 参数展示区域（动态） -->
+        <div class="param-section" id="paramsSection"></div>
+        
+        <!-- 快速反馈按钮 -->
+        <button class="btn btn-feedback" id="feedbackBtn">
+            <i class="fas fa-exclamation-circle"></i> <span data-i18n="feedback_btn">快速问题反馈</span>
+        </button>
+        
+        <!-- 用户状态 -->
+        <div class="user-status" id="userStatus">
+            <span data-i18n="user_status_anonymous">您正在匿名访问，</span><span class="login-link" onclick="showLogin()" data-i18n="set_personal_info">点击设置个人信息</span>
+        </div>
+        
+        <!-- 底部信息 -->
+        <div class="footer">
+            <div><span data-i18n="version">工艺参数版本: 2026.3.1</span> | <span data-i18n="last_update">最后更新: 2026-03-15</span></div>
+            <div id="feedbackCounter" style="margin-top: 5px;"></div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== 配置 ====================
+        const CONFIG = {
+            serverChanKey: 'SCT312972Tjk8P663lIBdPdOesYvNJpWb3', // Server酱 Key
+
+            // ---------- 邮件发送 (EmailJS) 配置 ----------
+            EMAILJS_PUBLIC_KEY: '4CAtRN2LXajU5ZIJg',               // 您的 Public Key
+            EMAILJS_SERVICE_ID: 'service_bd7g28u',                // 您的 Service ID
+            EMAILJS_TEMPLATE_ID: 'template_vhba6lk',              // 您的 Template ID
+            TO_EMAIL: '827919589@qq.com',                         // 收件人 (已在模板中设置)
+        };
+
+        // ==================== 机台映射表 ====================
+        // 请根据实际机台配置填写，键为 URL 中的 id 参数值（如 "A-01"），值为对应的产品、材料、模具
+        const machineMapping = {
+            // 示例： "A-01": { product: "HL", material: "FR370", mold: "Q" },
+            //      "B-02": { product: "B05Ub4HT+", material: "PPO-PX9406", mold: "J" },
+            // 请务必确保产品名、材料名、模具号与 processDatabase 中的完全一致（包括大小写和空格）
+        };
+
+        // ==================== 国际化翻译资源 ====================
+        const i18n = {
+            zh: {
+                title: '注塑工艺数字化看板',
+                online: '在线',
+                product_label: '1. 选择产品名称',
+                product_placeholder: '请选择产品',
+                product_hint: '选择产品后会自动匹配材料',
+                material_label: '2. 选择材料',
+                material_placeholder: '请先选择产品',
+                mold_label: '3. 选择模具号',
+                mold_placeholder: '请先选择材料',
+                mold_hint: '同一产品材料可能有多个模具号',
+                view_params: '查看完整工艺参数',
+                feedback_btn: '快速问题反馈',
+                user_status_anonymous: '您正在匿名访问，',
+                set_personal_info: '点击设置个人信息',
+                version: '工艺参数版本: 2026.3.1',
+                last_update: '最后更新: 2026-03-15',
+                feedback_counter: '本机累计反馈: {count} 条',
+                loading: '加载中...',
+                // 参数区域标题
+                base_params: '基础参数 - 模具 {mold}',
+                temp_params: '温度参数',
+                injection_params: '射出参数',
+                holding_params: '保压参数',
+                holding_first: '保压第一段：',
+                holding_second: '保压第二段：',
+                melting_params: '储料段溶胶参数',
+                screw_params: '绞牙参数',
+                tip: '提示',
+                tip_text: '如果发现实际参数与显示不一致，请立即点击"快速问题反馈"按钮报告问题。',
+                // 表格表头
+                table_nozzle: '射胶嘴口',
+                table_barrel1: '料管一段',
+                table_barrel2: '料管二段',
+                table_barrel3: '料管三段',
+                table_barrel4: '料管四段',
+                table_stage: '阶段',
+                table_speed: '速度(%)',
+                table_pressure: '压力(bar/kgf)',
+                table_position: '位置(mm)',
+                table_backpressure: '背压',
+                table_melt_pressure: '压力',
+                // 参数项标签
+                drying_temp: '干燥温度',
+                weight: '产品单重',
+                fixed_mold_temp: '定模温度',
+                moving_mold_temp: '动模温度',
+                temp_control_box: '温控箱温度',
+                mold_opening_end: '开模终止位置',
+                ejection_end: '顶出终止位置',
+                holding_end: '保压射胶终点',
+                holding_position: '保压位置',
+                holding_time: '保压时间',
+                time: '时间',
+                speed: '速度',
+                pressure: '压力',
+                // 绞牙
+                screw_in_time: '绞牙进时间',
+                screw_in_speed: '绞牙进速度',
+                screw_in_pressure: '绞牙进压力',
+                screw_out_time: '绞牙退时间',
+                screw_out_speed: '绞牙退速度',
+                screw_out_pressure: '绞牙退压力',
+                screw_action_order: '绞牙动作顺序',
+                // 弹窗
+                login_title: '设置个人信息',
+                login_desc: '请填写您的姓名或工号（必填），之后才能查看参数和反馈',
+                login_name_label: '您的姓名/工号',
+                login_dept_label: '部门/岗位（选填）',
+                login_contact_label: '联系方式（选填）',
+                login_save: '保存信息',
+                login_cancel: '暂不设置',
+                login_required: '姓名或工号不能为空',
+                login_success: '✅ 信息已保存',
+                feedback_title: '📢 问题反馈',
+                feedback_type_label: '问题类型',
+                feedback_content_label: '问题描述',
+                feedback_urgent: '紧急问题',
+                feedback_submit: '提交反馈',
+                feedback_placeholder: '请详细描述问题现象...',
+                feedback_required: '请填写问题描述',
+                feedback_success: '✅ 反馈已提交',
+                feedback_success_text: '感谢您的反馈，微信通知已尝试发送。',
+                // 反馈类型
+                feedback_type1: '参数不一致',
+                feedback_type2: '操作问题',
+                feedback_type3: '设备故障',
+                feedback_type4: '材料问题',
+                feedback_type5: '改进建议',
+                feedback_type6: '其他',
+                // 警告
+                need_login_title: '需要先设置个人信息',
+                need_login_text: '请填写姓名或工号后，才能查看工艺参数',
+                need_login_text_feedback: '请填写姓名或工号后，才能提交反馈',
+                go_set: '去设置',
+                warning_select_complete: '请选择完整信息',
+                warning_select_text: '请选择产品、材料和模具号',
+            },
+            vi: {
+                title: 'Bảng điều khiển số hóa quy trình ép phun',
+                online: 'Trực tuyến',
+                product_label: '1. Chọn tên sản phẩm',
+                product_placeholder: 'Vui lòng chọn sản phẩm',
+                product_hint: 'Sau khi chọn sản phẩm, vật liệu sẽ tự động khớp',
+                material_label: '2. Chọn vật liệu',
+                material_placeholder: 'Vui lòng chọn sản phẩm trước',
+                mold_label: '3. Chọn số khuôn',
+                mold_placeholder: 'Vui lòng chọn vật liệu trước',
+                mold_hint: 'Cùng một sản phẩm có thể có nhiều số khuôn',
+                view_params: 'Xem thông số quy trình đầy đủ',
+                feedback_btn: 'Phản hồi nhanh',
+                user_status_anonymous: 'Bạn đang truy cập ẩn danh, ',
+                set_personal_info: 'nhấp để cài đặt thông tin cá nhân',
+                version: 'Phiên bản thông số: 2026.3.1',
+                last_update: 'Cập nhật lần cuối: 2026-03-15',
+                feedback_counter: 'Tổng số phản hồi máy này: {count}',
+                loading: 'Đang tải...',
+                base_params: 'Thông số cơ bản - Khuôn {mold}',
+                temp_params: 'Thông số nhiệt độ',
+                injection_params: 'Thông số phun',
+                holding_params: 'Thông số giữ áp',
+                holding_first: 'Giai đoạn giữ áp 1:',
+                holding_second: 'Giai đoạn giữ áp 2:',
+                melting_params: 'Thông số hóa nhựa',
+                screw_params: 'Thông số ren',
+                tip: 'Gợi ý',
+                tip_text: 'Nếu phát hiện thông số thực tế không khớp, hãy nhấp ngay "Phản hồi nhanh" để báo cáo.',
+                table_nozzle: 'Đầu phun',
+                table_barrel1: 'Đoạn 1',
+                table_barrel2: 'Đoạn 2',
+                table_barrel3: 'Đoạn 3',
+                table_barrel4: 'Đoạn 4',
+                table_stage: 'Giai đoạn',
+                table_speed: 'Tốc độ (%)',
+                table_pressure: 'Áp suất (bar/kgf)',
+                table_position: 'Vị trí (mm)',
+                table_backpressure: 'Áp suất ngược',
+                table_melt_pressure: 'Áp suất',
+                drying_temp: 'Nhiệt độ sấy',
+                weight: 'Trọng lượng đơn',
+                fixed_mold_temp: 'Nhiệt độ khuôn cố định',
+                moving_mold_temp: 'Nhiệt độ khuôn di động',
+                temp_control_box: 'Tủ điều khiển nhiệt',
+                mold_opening_end: 'Vị trí kết thúc mở khuôn',
+                ejection_end: 'Vị trí kết thúc đẩy',
+                holding_end: 'Điểm cuối giữ áp',
+                holding_position: 'Vị trí giữ áp',
+                holding_time: 'Thời gian giữ áp',
+                time: 'Thời gian',
+                speed: 'Tốc độ',
+                pressure: 'Áp suất',
+                screw_in_time: 'Thời gian ren vào',
+                screw_in_speed: 'Tốc độ ren vào',
+                screw_in_pressure: 'Áp suất ren vào',
+                screw_out_time: 'Thời gian ren ra',
+                screw_out_speed: 'Tốc độ ren ra',
+                screw_out_pressure: 'Áp suất ren ra',
+                screw_action_order: 'Thứ tự ren',
+                login_title: 'Cài đặt thông tin cá nhân',
+                login_desc: 'Vui lòng nhập tên hoặc mã nhân viên (bắt buộc), sau đó mới có thể xem thông số và phản hồi',
+                login_name_label: 'Tên / Mã nhân viên',
+                login_dept_label: 'Bộ phận / Chức vụ (không bắt buộc)',
+                login_contact_label: 'Liên hệ (không bắt buộc)',
+                login_save: 'Lưu thông tin',
+                login_cancel: 'Để sau',
+                login_required: 'Tên hoặc mã nhân viên không được để trống',
+                login_success: '✅ Đã lưu thông tin',
+                feedback_title: '📢 Phản hồi vấn đề',
+                feedback_type_label: 'Loại vấn đề',
+                feedback_content_label: 'Mô tả vấn đề',
+                feedback_urgent: 'Vấn đề khẩn cấp',
+                feedback_submit: 'Gửi phản hồi',
+                feedback_placeholder: 'Vui lòng mô tả chi tiết hiện tượng...',
+                feedback_required: 'Vui lòng nhập mô tả vấn đề',
+                feedback_success: '✅ Đã gửi phản hồi',
+                feedback_success_text: 'Cảm ơn phản hồi của bạn, thông báo WeChat đã được gửi.',
+                feedback_type1: 'Thông số không khớp',
+                feedback_type2: 'Vấn đề thao tác',
+                feedback_type3: 'Lỗi thiết bị',
+                feedback_type4: 'Vấn đề vật liệu',
+                feedback_type5: 'Đề xuất cải tiến',
+                feedback_type6: 'Khác',
+                need_login_title: 'Cần cài đặt thông tin cá nhân',
+                need_login_text: 'Vui lòng nhập tên hoặc mã nhân viên để xem thông số',
+                need_login_text_feedback: 'Vui lòng nhập tên hoặc mã nhân viên để gửi phản hồi',
+                go_set: 'Đi cài đặt',
+                warning_select_complete: 'Vui lòng chọn đầy đủ thông tin',
+                warning_select_text: 'Vui lòng chọn sản phẩm, vật liệu và số khuôn',
+            }
+        };
+
+        let currentLang = 'zh'; // 默认中文
+
+        // 翻译函数
+        function t(key, params = {}) {
+            let text = i18n[currentLang][key] || i18n.zh[key] || key;
+            for (let p in params) {
+                text = text.replace(`{${p}}`, params[p]);
+            }
+            return text;
+        }
+
+        // ==================== 工艺数据库 (根据修正后参数模板.xlsx 完整填充，包含绞牙数据) ====================
+        const processDatabase = {
+            // 产品：HL
+            "HL": {
+                "FR370": {
+                    "Q": { dryingTemp: "110°C", weight: "0.335g", fixedMoldTemp: "45°C", movingMoldTemp: "45°C", tempControlBox: "265°C", moldOpeningEnd: "348", ejectionEnd: "27", nozzle: "275°C", barrel1: "265°C", barrel2: "260°C", barrel3: "260°C", barrel4: "255°C", injection1Speed: "80", injection1Pressure: "150", injection1Position: "10.5", injection2Speed: "50", injection2Pressure: "150", injection2Position: "7", injection3Speed: "20", injection3Pressure: "150", injection3Position: "", holdingEnd: "4.2", holdingPosition: "5.5", holdingTime: "2", holding1Time: "0.5", holding1Speed: "15", holding1Pressure: "20", holding2Time: "", holding2Speed: "", holding2Pressure: "", melting1BackPressure: "5", melting1Speed: "80", melting1Pressure: "40", melting1Position: "7", melting2BackPressure: "5", melting2Speed: "40", melting2Pressure: "80", melting2Position: "10", melting3BackPressure: "5", melting3Speed: "40", melting3Pressure: "80", melting3Position: "17" },
+                    "R": { dryingTemp: "110°C", weight: "0.335g", fixedMoldTemp: "45°C", movingMoldTemp: "45°C", tempControlBox: "265°C", moldOpeningEnd: "348", ejectionEnd: "27", nozzle: "275°C", barrel1: "265°C", barrel2: "260°C", barrel3: "260°C", barrel4: "255°C", injection1Speed: "80", injection1Pressure: "150", injection1Position: "10.5", injection2Speed: "50", injection2Pressure: "150", injection2Position: "7", injection3Speed: "20", injection3Pressure: "150", injection3Position: "", holdingEnd: "4.2", holdingPosition: "5.5", holdingTime: "2", holding1Time: "0.5", holding1Speed: "15", holding1Pressure: "20", holding2Time: "", holding2Speed: "", holding2Pressure: "", melting1BackPressure: "5", melting1Speed: "80", melting1Pressure: "40", melting1Position: "7", melting2BackPressure: "5", melting2Speed: "40", melting2Pressure: "80", melting2Position: "10", melting3BackPressure: "5", melting3Speed: "40", melting3Pressure: "80", melting3Position: "17" },
+                    "N": { dryingTemp: "110°C", weight: "0.335g", fixedMoldTemp: "45°C", movingMoldTemp: "45°C", tempControlBox: "265°C", moldOpeningEnd: "348", ejectionEnd: "27", nozzle: "275°C", barrel1: "265°C", barrel2: "260°C", barrel3: "260°C", barrel4: "255°C", injection1Speed: "80", injection1Pressure: "150", injection1Position: "10.5", injection2Speed: "50", injection2Pressure: "150", injection2Position: "7", injection3Speed: "20", injection3Pressure: "150", injection3Position: "", holdingEnd: "4.2", holdingPosition: "5.5", holdingTime: "2", holding1Time: "0.5", holding1Speed: "15", holding1Pressure: "20", holding2Time: "", holding2Speed: "", holding2Pressure: "", melting1BackPressure: "5", melting1Speed: "80", melting1Pressure: "40", melting1Position: "7", melting2BackPressure: "5", melting2Speed: "40", melting2Pressure: "80", melting2Position: "10", melting3BackPressure: "5", melting3Speed: "40", melting3Pressure: "80", melting3Position: "17" }
+                },
+                "T303-00GF": {
+                    "Q": { dryingTemp: "110°C", weight: "0.335g", fixedMoldTemp: "45°C", movingMoldTemp: "45°C", tempControlBox: "265°C", moldOpeningEnd: "348", ejectionEnd: "27", nozzle: "275°C", barrel1: "265°C", barrel2: "260°C", barrel3: "260°C", barrel4: "255°C", injection1Speed: "80", injection1Pressure: "150", injection1Position: "10.5", injection2Speed: "50", injection2Pressure: "150", injection2Position: "7", injection3Speed: "20", injection3Pressure: "150", injection3Position: "", holdingEnd: "4.2", holdingPosition: "5.5", holdingTime: "2", holding1Time: "0.5", holding1Speed: "15", holding1Pressure: "20", holding2Time: "", holding2Speed: "", holding2Pressure: "", melting1BackPressure: "5", melting1Speed: "80", melting1Pressure: "40", melting1Position: "7", melting2BackPressure: "5", melting2Speed: "40", melting2Pressure: "80", melting2Position: "10", melting3BackPressure: "5", melting3Speed: "40", melting3Pressure: "80", melting3Position: "17" },
+                    "R": { dryingTemp: "110°C", weight: "0.335g", fixedMoldTemp: "45°C", movingMoldTemp: "45°C", tempControlBox: "265°C", moldOpeningEnd: "348", ejectionEnd: "27", nozzle: "275°C", barrel1: "265°C", barrel2: "260°C", barrel3: "260°C", barrel4: "255°C", injection1Speed: "80", injection1Pressure: "150", injection1Position: "10.5", injection2Speed: "50", injection2Pressure: "150", injection2Position: "7", injection3Speed: "20", injection3Pressure: "150", injection3Position: "", holdingEnd: "4.2", holdingPosition: "5.5", holdingTime: "2", holding1Time: "0.5", holding1Speed: "15", holding1Pressure: "20", holding2Time: "", holding2Speed: "", holding2Pressure: "", melting1BackPressure: "5", melting1Speed: "80", melting1Pressure: "40", melting1Position: "7", melting2BackPressure: "5", melting2Speed: "40", melting2Pressure: "80", melting2Position: "10", melting3BackPressure: "5", melting3Speed: "40", melting3Pressure: "80", melting3Position: "17" },
+                    "N": { dryingTemp: "110°C", weight: "0.335g", fixedMoldTemp: "45°C", movingMoldTemp: "45°C", tempControlBox: "265°C", moldOpeningEnd: "348", ejectionEnd: "27", nozzle: "275°C", barrel1: "265°C", barrel2: "260°C", barrel3: "260°C", barrel4: "255°C", injection1Speed: "80", injection1Pressure: "150", injection1Position: "10.5", injection2Speed: "50", injection2Pressure: "150", injection2Position: "7", injection3Speed: "20", injection3Pressure: "150", injection3Position: "", holdingEnd: "4.2", holdingPosition: "5.5", holdingTime: "2", holding1Time: "0.5", holding1Speed: "15", holding1Pressure: "20", holding2Time: "", holding2Speed: "", holding2Pressure: "", melting1BackPressure: "5", melting1Speed: "80", melting1Pressure: "40", melting1Position: "7", melting2BackPressure: "5", melting2Speed: "40", melting2Pressure: "80", melting2Position: "10", melting3BackPressure: "5", melting3Speed: "40", melting3Pressure: "80", melting3Position: "17" }
+                }
+            },
+            // 产品：B05Ub4 HT+
+            "B05Ub4HT+": {
+                "PPO-PX9406": {
+                    "J": { dryingTemp: "110°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "360", ejectionEnd: "45", nozzle: "295°C", barrel1: "290°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "30", injection1Pressure: "140", injection1Position: "50", injection2Speed: "75", injection2Pressure: "150", injection2Position: "25", injection3Speed: "45", injection3Pressure: "140", injection3Position: "", holdingEnd: "8.9", holdingPosition: "15", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "90", holding2Time: "1", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "60", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "60", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "60", melting3Pressure: "110", melting3Position: "50" },
+                    "K": { dryingTemp: "110°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "360", ejectionEnd: "45", nozzle: "295°C", barrel1: "290°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "30", injection1Pressure: "140", injection1Position: "50", injection2Speed: "75", injection2Pressure: "150", injection2Position: "25", injection3Speed: "45", injection3Pressure: "140", injection3Position: "", holdingEnd: "8.9", holdingPosition: "15", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "90", holding2Time: "1", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "60", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "60", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "60", melting3Pressure: "110", melting3Position: "50" },
+                    "L": { dryingTemp: "110°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "360", ejectionEnd: "45", nozzle: "295°C", barrel1: "290°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "30", injection1Pressure: "140", injection1Position: "50", injection2Speed: "75", injection2Pressure: "150", injection2Position: "25", injection3Speed: "45", injection3Pressure: "140", injection3Position: "", holdingEnd: "8.9", holdingPosition: "15", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "90", holding2Time: "1", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "60", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "60", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "60", melting3Pressure: "110", melting3Position: "50" },
+                    "M": { dryingTemp: "110°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "360", ejectionEnd: "45", nozzle: "295°C", barrel1: "290°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "30", injection1Pressure: "140", injection1Position: "50", injection2Speed: "75", injection2Pressure: "150", injection2Position: "25", injection3Speed: "45", injection3Pressure: "140", injection3Position: "", holdingEnd: "8.9", holdingPosition: "15", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "90", holding2Time: "1", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "60", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "60", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "60", melting3Pressure: "110", melting3Position: "50" },
+                    "N": { dryingTemp: "110°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "360", ejectionEnd: "45", nozzle: "295°C", barrel1: "290°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "30", injection1Pressure: "140", injection1Position: "50", injection2Speed: "75", injection2Pressure: "150", injection2Position: "25", injection3Speed: "45", injection3Pressure: "140", injection3Position: "", holdingEnd: "8.9", holdingPosition: "15", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "90", holding2Time: "1", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "60", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "60", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "60", melting3Pressure: "110", melting3Position: "50" }
+                },
+                "PPE-1311": {
+                    "J": { dryingTemp: "90°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "360", ejectionEnd: "45", nozzle: "295°C", barrel1: "290°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "30", injection1Pressure: "140", injection1Position: "50", injection2Speed: "75", injection2Pressure: "150", injection2Position: "25", injection3Speed: "45", injection3Pressure: "140", injection3Position: "", holdingEnd: "8.9", holdingPosition: "15", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "90", holding2Time: "1", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "60", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "60", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "60", melting3Pressure: "110", melting3Position: "50" },
+                    "K": { dryingTemp: "90°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "360", ejectionEnd: "45", nozzle: "295°C", barrel1: "290°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "30", injection1Pressure: "140", injection1Position: "50", injection2Speed: "75", injection2Pressure: "150", injection2Position: "25", injection3Speed: "45", injection3Pressure: "140", injection3Position: "", holdingEnd: "8.9", holdingPosition: "15", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "90", holding2Time: "1", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "60", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "60", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "60", melting3Pressure: "110", melting3Position: "50" },
+                    "L": { dryingTemp: "90°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "360", ejectionEnd: "45", nozzle: "295°C", barrel1: "290°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "30", injection1Pressure: "140", injection1Position: "50", injection2Speed: "75", injection2Pressure: "150", injection2Position: "25", injection3Speed: "45", injection3Pressure: "140", injection3Position: "", holdingEnd: "8.9", holdingPosition: "15", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "90", holding2Time: "1", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "60", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "60", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "60", melting3Pressure: "110", melting3Position: "50" },
+                    "M": { dryingTemp: "90°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "360", ejectionEnd: "45", nozzle: "295°C", barrel1: "290°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "30", injection1Pressure: "140", injection1Position: "50", injection2Speed: "75", injection2Pressure: "150", injection2Position: "25", injection3Speed: "45", injection3Pressure: "140", injection3Position: "", holdingEnd: "8.9", holdingPosition: "15", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "90", holding2Time: "1", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "60", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "60", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "60", melting3Pressure: "110", melting3Position: "50" },
+                    "N": { dryingTemp: "90°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "360", ejectionEnd: "45", nozzle: "295°C", barrel1: "290°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "30", injection1Pressure: "140", injection1Position: "50", injection2Speed: "75", injection2Pressure: "150", injection2Position: "25", injection3Speed: "45", injection3Pressure: "140", injection3Position: "", holdingEnd: "8.9", holdingPosition: "15", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "90", holding2Time: "1", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "60", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "60", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "60", melting3Pressure: "110", melting3Position: "50" }
+                },
+                "PPE-LXS112": {
+                    "J": { dryingTemp: "90°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "360", ejectionEnd: "45", nozzle: "295°C", barrel1: "290°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "30", injection1Pressure: "140", injection1Position: "50", injection2Speed: "75", injection2Pressure: "150", injection2Position: "25", injection3Speed: "45", injection3Pressure: "140", injection3Position: "", holdingEnd: "8.9", holdingPosition: "15", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "90", holding2Time: "1", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "60", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "60", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "60", melting3Pressure: "110", melting3Position: "50" },
+                    "K": { dryingTemp: "90°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "360", ejectionEnd: "45", nozzle: "295°C", barrel1: "290°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "30", injection1Pressure: "140", injection1Position: "50", injection2Speed: "75", injection2Pressure: "150", injection2Position: "25", injection3Speed: "45", injection3Pressure: "140", injection3Position: "", holdingEnd: "8.9", holdingPosition: "15", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "90", holding2Time: "1", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "60", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "60", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "60", melting3Pressure: "110", melting3Position: "50" },
+                    "L": { dryingTemp: "90°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "360", ejectionEnd: "45", nozzle: "295°C", barrel1: "290°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "30", injection1Pressure: "140", injection1Position: "50", injection2Speed: "75", injection2Pressure: "150", injection2Position: "25", injection3Speed: "45", injection3Pressure: "140", injection3Position: "", holdingEnd: "8.9", holdingPosition: "15", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "90", holding2Time: "1", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "60", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "60", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "60", melting3Pressure: "110", melting3Position: "50" },
+                    "M": { dryingTemp: "90°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "360", ejectionEnd: "45", nozzle: "295°C", barrel1: "290°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "30", injection1Pressure: "140", injection1Position: "50", injection2Speed: "75", injection2Pressure: "150", injection2Position: "25", injection3Speed: "45", injection3Pressure: "140", injection3Position: "", holdingEnd: "8.9", holdingPosition: "15", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "90", holding2Time: "1", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "60", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "60", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "60", melting3Pressure: "110", melting3Position: "50" },
+                    "N": { dryingTemp: "90°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "360", ejectionEnd: "45", nozzle: "295°C", barrel1: "290°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "30", injection1Pressure: "140", injection1Position: "50", injection2Speed: "75", injection2Pressure: "150", injection2Position: "25", injection3Speed: "45", injection3Pressure: "140", injection3Position: "", holdingEnd: "8.9", holdingPosition: "15", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "90", holding2Time: "1", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "60", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "60", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "60", melting3Pressure: "110", melting3Position: "50" }
+                }
+            },
+            // 产品：B05Ub4 HT-
+            "B05Ub4 HT-": {
+                "PPO-PX9406": {
+                    "J": { dryingTemp: "110°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "380", ejectionEnd: "45", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "85", injection2Pressure: "140", injection2Position: "30", injection3Speed: "55", injection3Pressure: "130", injection3Position: "", holdingEnd: "6.8", holdingPosition: "13", holdingTime: "3", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "95", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "110", melting3Position: "55" },
+                    "K": { dryingTemp: "110°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "380", ejectionEnd: "45", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "85", injection2Pressure: "140", injection2Position: "30", injection3Speed: "55", injection3Pressure: "130", injection3Position: "", holdingEnd: "6.8", holdingPosition: "13", holdingTime: "3", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "95", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "110", melting3Position: "55" },
+                    "L": { dryingTemp: "110°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "380", ejectionEnd: "45", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "85", injection2Pressure: "140", injection2Position: "30", injection3Speed: "55", injection3Pressure: "130", injection3Position: "", holdingEnd: "6.8", holdingPosition: "13", holdingTime: "3", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "95", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "110", melting3Position: "55" },
+                    "M": { dryingTemp: "110°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "380", ejectionEnd: "45", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "85", injection2Pressure: "140", injection2Position: "30", injection3Speed: "55", injection3Pressure: "130", injection3Position: "", holdingEnd: "6.8", holdingPosition: "13", holdingTime: "3", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "95", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "110", melting3Position: "55" },
+                    "N": { dryingTemp: "110°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "380", ejectionEnd: "45", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "85", injection2Pressure: "140", injection2Position: "30", injection3Speed: "55", injection3Pressure: "130", injection3Position: "", holdingEnd: "6.8", holdingPosition: "13", holdingTime: "3", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "95", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "110", melting3Position: "55" }
+                },
+                "PPE-1311": {
+                    "J": { dryingTemp: "90°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "380", ejectionEnd: "45", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "85", injection2Pressure: "140", injection2Position: "30", injection3Speed: "55", injection3Pressure: "130", injection3Position: "", holdingEnd: "6.8", holdingPosition: "13", holdingTime: "3", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "95", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "110", melting3Position: "55" },
+                    "K": { dryingTemp: "90°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "380", ejectionEnd: "45", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "85", injection2Pressure: "140", injection2Position: "30", injection3Speed: "55", injection3Pressure: "130", injection3Position: "", holdingEnd: "6.8", holdingPosition: "13", holdingTime: "3", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "95", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "110", melting3Position: "55" },
+                    "L": { dryingTemp: "90°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "380", ejectionEnd: "45", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "85", injection2Pressure: "140", injection2Position: "30", injection3Speed: "55", injection3Pressure: "130", injection3Position: "", holdingEnd: "6.8", holdingPosition: "13", holdingTime: "3", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "95", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "110", melting3Position: "55" },
+                    "M": { dryingTemp: "90°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "380", ejectionEnd: "45", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "85", injection2Pressure: "140", injection2Position: "30", injection3Speed: "55", injection3Pressure: "130", injection3Position: "", holdingEnd: "6.8", holdingPosition: "13", holdingTime: "3", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "95", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "110", melting3Position: "55" },
+                    "N": { dryingTemp: "90°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "380", ejectionEnd: "45", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "85", injection2Pressure: "140", injection2Position: "30", injection3Speed: "55", injection3Pressure: "130", injection3Position: "", holdingEnd: "6.8", holdingPosition: "13", holdingTime: "3", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "95", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "110", melting3Position: "55" }
+                },
+                "PPE-LXS112": {
+                    "J": { dryingTemp: "90°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "380", ejectionEnd: "45", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "85", injection2Pressure: "140", injection2Position: "30", injection3Speed: "55", injection3Pressure: "130", injection3Position: "", holdingEnd: "6.8", holdingPosition: "13", holdingTime: "3", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "95", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "110", melting3Position: "55" },
+                    "K": { dryingTemp: "90°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "380", ejectionEnd: "45", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "85", injection2Pressure: "140", injection2Position: "30", injection3Speed: "55", injection3Pressure: "130", injection3Position: "", holdingEnd: "6.8", holdingPosition: "13", holdingTime: "3", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "95", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "110", melting3Position: "55" },
+                    "L": { dryingTemp: "90°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "380", ejectionEnd: "45", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "85", injection2Pressure: "140", injection2Position: "30", injection3Speed: "55", injection3Pressure: "130", injection3Position: "", holdingEnd: "6.8", holdingPosition: "13", holdingTime: "3", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "95", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "110", melting3Position: "55" },
+                    "M": { dryingTemp: "90°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "380", ejectionEnd: "45", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "85", injection2Pressure: "140", injection2Position: "30", injection3Speed: "55", injection3Pressure: "130", injection3Position: "", holdingEnd: "6.8", holdingPosition: "13", holdingTime: "3", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "95", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "110", melting3Position: "55" },
+                    "N": { dryingTemp: "90°C", weight: "8.5g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "380", ejectionEnd: "45", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "85", injection2Pressure: "140", injection2Position: "30", injection3Speed: "55", injection3Pressure: "130", injection3Position: "", holdingEnd: "6.8", holdingPosition: "13", holdingTime: "3", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "95", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "110", melting2Position: "30", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "110", melting3Position: "55" }
+                }
+            },
+            // 产品：B05Ub4 HTM (单重8.1g)
+            "B05Ub4 HTM": {
+                "PPO-PX9406": {
+                    "J": { dryingTemp: "110°C", weight: "8.1g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "400", ejectionEnd: "44", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "75", injection2Pressure: "150", injection2Position: "30", injection3Speed: "30", injection3Pressure: "120", injection3Position: "", holdingEnd: "11.4", holdingPosition: "20", holdingTime: "3", holding1Time: "1.2", holding1Speed: "20", holding1Pressure: "90", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "8", melting1Speed: "55", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "8", melting2Speed: "55", melting2Pressure: "100", melting2Position: "25", melting3BackPressure: "8", melting3Speed: "55", melting3Pressure: "100", melting3Position: "55" },
+                    "K": { dryingTemp: "110°C", weight: "8.1g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "400", ejectionEnd: "44", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "75", injection2Pressure: "150", injection2Position: "30", injection3Speed: "30", injection3Pressure: "120", injection3Position: "", holdingEnd: "11.4", holdingPosition: "20", holdingTime: "3", holding1Time: "1.2", holding1Speed: "20", holding1Pressure: "90", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "8", melting1Speed: "55", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "8", melting2Speed: "55", melting2Pressure: "100", melting2Position: "25", melting3BackPressure: "8", melting3Speed: "55", melting3Pressure: "100", melting3Position: "55" },
+                    "L": { dryingTemp: "110°C", weight: "8.1g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "400", ejectionEnd: "44", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "75", injection2Pressure: "150", injection2Position: "30", injection3Speed: "30", injection3Pressure: "120", injection3Position: "", holdingEnd: "11.4", holdingPosition: "20", holdingTime: "3", holding1Time: "1.2", holding1Speed: "20", holding1Pressure: "90", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "8", melting1Speed: "55", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "8", melting2Speed: "55", melting2Pressure: "100", melting2Position: "25", melting3BackPressure: "8", melting3Speed: "55", melting3Pressure: "100", melting3Position: "55" },
+                    "M": { dryingTemp: "110°C", weight: "8.1g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "400", ejectionEnd: "44", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "75", injection2Pressure: "150", injection2Position: "30", injection3Speed: "30", injection3Pressure: "120", injection3Position: "", holdingEnd: "11.4", holdingPosition: "20", holdingTime: "3", holding1Time: "1.2", holding1Speed: "20", holding1Pressure: "90", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "8", melting1Speed: "55", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "8", melting2Speed: "55", melting2Pressure: "100", melting2Position: "25", melting3BackPressure: "8", melting3Speed: "55", melting3Pressure: "100", melting3Position: "55" },
+                    "N": { dryingTemp: "110°C", weight: "8.1g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "400", ejectionEnd: "44", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "75", injection2Pressure: "150", injection2Position: "30", injection3Speed: "30", injection3Pressure: "120", injection3Position: "", holdingEnd: "11.4", holdingPosition: "20", holdingTime: "3", holding1Time: "1.2", holding1Speed: "20", holding1Pressure: "90", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "8", melting1Speed: "55", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "8", melting2Speed: "55", melting2Pressure: "100", melting2Position: "25", melting3BackPressure: "8", melting3Speed: "55", melting3Pressure: "100", melting3Position: "55" }
+                },
+                "PPE-1311": {
+                    "J": { dryingTemp: "90°C", weight: "8.1g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "400", ejectionEnd: "44", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "75", injection2Pressure: "150", injection2Position: "30", injection3Speed: "30", injection3Pressure: "120", injection3Position: "", holdingEnd: "11.4", holdingPosition: "20", holdingTime: "3", holding1Time: "1.2", holding1Speed: "20", holding1Pressure: "90", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "8", melting1Speed: "55", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "8", melting2Speed: "55", melting2Pressure: "100", melting2Position: "25", melting3BackPressure: "8", melting3Speed: "55", melting3Pressure: "100", melting3Position: "55" },
+                    "K": { dryingTemp: "90°C", weight: "8.1g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "400", ejectionEnd: "44", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "75", injection2Pressure: "150", injection2Position: "30", injection3Speed: "30", injection3Pressure: "120", injection3Position: "", holdingEnd: "11.4", holdingPosition: "20", holdingTime: "3", holding1Time: "1.2", holding1Speed: "20", holding1Pressure: "90", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "8", melting1Speed: "55", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "8", melting2Speed: "55", melting2Pressure: "100", melting2Position: "25", melting3BackPressure: "8", melting3Speed: "55", melting3Pressure: "100", melting3Position: "55" },
+                    "L": { dryingTemp: "90°C", weight: "8.1g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "400", ejectionEnd: "44", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "75", injection2Pressure: "150", injection2Position: "30", injection3Speed: "30", injection3Pressure: "120", injection3Position: "", holdingEnd: "11.4", holdingPosition: "20", holdingTime: "3", holding1Time: "1.2", holding1Speed: "20", holding1Pressure: "90", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "8", melting1Speed: "55", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "8", melting2Speed: "55", melting2Pressure: "100", melting2Position: "25", melting3BackPressure: "8", melting3Speed: "55", melting3Pressure: "100", melting3Position: "55" },
+                    "M": { dryingTemp: "90°C", weight: "8.1g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "400", ejectionEnd: "44", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "75", injection2Pressure: "150", injection2Position: "30", injection3Speed: "30", injection3Pressure: "120", injection3Position: "", holdingEnd: "11.4", holdingPosition: "20", holdingTime: "3", holding1Time: "1.2", holding1Speed: "20", holding1Pressure: "90", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "8", melting1Speed: "55", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "8", melting2Speed: "55", melting2Pressure: "100", melting2Position: "25", melting3BackPressure: "8", melting3Speed: "55", melting3Pressure: "100", melting3Position: "55" },
+                    "N": { dryingTemp: "90°C", weight: "8.1g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "400", ejectionEnd: "44", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "75", injection2Pressure: "150", injection2Position: "30", injection3Speed: "30", injection3Pressure: "120", injection3Position: "", holdingEnd: "11.4", holdingPosition: "20", holdingTime: "3", holding1Time: "1.2", holding1Speed: "20", holding1Pressure: "90", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "8", melting1Speed: "55", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "8", melting2Speed: "55", melting2Pressure: "100", melting2Position: "25", melting3BackPressure: "8", melting3Speed: "55", melting3Pressure: "100", melting3Position: "55" }
+                },
+                "PPE-LXS112": {
+                    "J": { dryingTemp: "90°C", weight: "8.1g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "400", ejectionEnd: "44", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "75", injection2Pressure: "150", injection2Position: "30", injection3Speed: "30", injection3Pressure: "120", injection3Position: "", holdingEnd: "11.4", holdingPosition: "20", holdingTime: "3", holding1Time: "1.2", holding1Speed: "20", holding1Pressure: "90", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "8", melting1Speed: "55", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "8", melting2Speed: "55", melting2Pressure: "100", melting2Position: "25", melting3BackPressure: "8", melting3Speed: "55", melting3Pressure: "100", melting3Position: "55" },
+                    "K": { dryingTemp: "90°C", weight: "8.1g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "400", ejectionEnd: "44", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "75", injection2Pressure: "150", injection2Position: "30", injection3Speed: "30", injection3Pressure: "120", injection3Position: "", holdingEnd: "11.4", holdingPosition: "20", holdingTime: "3", holding1Time: "1.2", holding1Speed: "20", holding1Pressure: "90", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "8", melting1Speed: "55", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "8", melting2Speed: "55", melting2Pressure: "100", melting2Position: "25", melting3BackPressure: "8", melting3Speed: "55", melting3Pressure: "100", melting3Position: "55" },
+                    "L": { dryingTemp: "90°C", weight: "8.1g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "400", ejectionEnd: "44", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "75", injection2Pressure: "150", injection2Position: "30", injection3Speed: "30", injection3Pressure: "120", injection3Position: "", holdingEnd: "11.4", holdingPosition: "20", holdingTime: "3", holding1Time: "1.2", holding1Speed: "20", holding1Pressure: "90", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "8", melting1Speed: "55", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "8", melting2Speed: "55", melting2Pressure: "100", melting2Position: "25", melting3BackPressure: "8", melting3Speed: "55", melting3Pressure: "100", melting3Position: "55" },
+                    "M": { dryingTemp: "90°C", weight: "8.1g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "400", ejectionEnd: "44", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "75", injection2Pressure: "150", injection2Position: "30", injection3Speed: "30", injection3Pressure: "120", injection3Position: "", holdingEnd: "11.4", holdingPosition: "20", holdingTime: "3", holding1Time: "1.2", holding1Speed: "20", holding1Pressure: "90", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "8", melting1Speed: "55", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "8", melting2Speed: "55", melting2Pressure: "100", melting2Position: "25", melting3BackPressure: "8", melting3Speed: "55", melting3Pressure: "100", melting3Position: "55" },
+                    "N": { dryingTemp: "90°C", weight: "8.1g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "400", ejectionEnd: "44", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "20", injection1Pressure: "150", injection1Position: "45", injection2Speed: "75", injection2Pressure: "150", injection2Position: "30", injection3Speed: "30", injection3Pressure: "120", injection3Position: "", holdingEnd: "11.4", holdingPosition: "20", holdingTime: "3", holding1Time: "1.2", holding1Speed: "20", holding1Pressure: "90", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "30", melting1BackPressure: "8", melting1Speed: "55", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "8", melting2Speed: "55", melting2Pressure: "100", melting2Position: "25", melting3BackPressure: "8", melting3Speed: "55", melting3Pressure: "100", melting3Position: "55" }
+                }
+            },
+            // 产品：B05Ub4 HG (单重3.23g)
+            "B05Ub4 HG": {
+                "PPO-PX9406": {
+                    "J": { dryingTemp: "110°C", weight: "3.23g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "370", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "45", injection1Pressure: "145", injection1Position: "48", injection2Speed: "55", injection2Pressure: "165", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "11.4", holdingPosition: "16.5", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "80", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "45", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "100", melting2Position: "35", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "100", melting3Position: "55" },
+                    "K": { dryingTemp: "110°C", weight: "3.23g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "370", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "45", injection1Pressure: "145", injection1Position: "48", injection2Speed: "55", injection2Pressure: "165", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "11.4", holdingPosition: "16.5", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "80", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "45", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "100", melting2Position: "35", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "100", melting3Position: "55" },
+                    "L": { dryingTemp: "110°C", weight: "3.23g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "370", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "45", injection1Pressure: "145", injection1Position: "48", injection2Speed: "55", injection2Pressure: "165", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "11.4", holdingPosition: "16.5", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "80", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "45", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "100", melting2Position: "35", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "100", melting3Position: "55" },
+                    "M": { dryingTemp: "110°C", weight: "3.23g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "370", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "45", injection1Pressure: "145", injection1Position: "48", injection2Speed: "55", injection2Pressure: "165", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "11.4", holdingPosition: "16.5", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "80", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "45", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "100", melting2Position: "35", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "100", melting3Position: "55" },
+                    "N": { dryingTemp: "110°C", weight: "3.23g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "370", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "45", injection1Pressure: "145", injection1Position: "48", injection2Speed: "55", injection2Pressure: "165", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "11.4", holdingPosition: "16.5", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "80", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "45", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "100", melting2Position: "35", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "100", melting3Position: "55" },
+                    "O": { dryingTemp: "110°C", weight: "3.23g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "370", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "45", injection1Pressure: "145", injection1Position: "48", injection2Speed: "55", injection2Pressure: "165", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "11.4", holdingPosition: "16.5", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "80", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "45", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "100", melting2Position: "35", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "100", melting3Position: "55" },
+                    "P": { dryingTemp: "110°C", weight: "3.23g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "370", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "45", injection1Pressure: "145", injection1Position: "48", injection2Speed: "55", injection2Pressure: "165", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "11.4", holdingPosition: "16.5", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "80", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "45", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "100", melting2Position: "35", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "100", melting3Position: "55" }
+                },
+                "PPE-1311": {
+                    "J": { dryingTemp: "90°C", weight: "3.23g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "370", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "45", injection1Pressure: "145", injection1Position: "48", injection2Speed: "55", injection2Pressure: "165", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "11.4", holdingPosition: "16.5", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "80", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "45", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "100", melting2Position: "35", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "100", melting3Position: "55" },
+                    "K": { dryingTemp: "90°C", weight: "3.23g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "370", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "45", injection1Pressure: "145", injection1Position: "48", injection2Speed: "55", injection2Pressure: "165", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "11.4", holdingPosition: "16.5", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "80", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "45", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "100", melting2Position: "35", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "100", melting3Position: "55" },
+                    "L": { dryingTemp: "90°C", weight: "3.23g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "370", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "45", injection1Pressure: "145", injection1Position: "48", injection2Speed: "55", injection2Pressure: "165", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "11.4", holdingPosition: "16.5", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "80", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "45", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "100", melting2Position: "35", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "100", melting3Position: "55" },
+                    "M": { dryingTemp: "90°C", weight: "3.23g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "370", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "45", injection1Pressure: "145", injection1Position: "48", injection2Speed: "55", injection2Pressure: "165", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "11.4", holdingPosition: "16.5", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "80", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "45", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "100", melting2Position: "35", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "100", melting3Position: "55" },
+                    "N": { dryingTemp: "90°C", weight: "3.23g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "370", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "45", injection1Pressure: "145", injection1Position: "48", injection2Speed: "55", injection2Pressure: "165", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "11.4", holdingPosition: "16.5", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "80", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "45", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "100", melting2Position: "35", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "100", melting3Position: "55" },
+                    "O": { dryingTemp: "90°C", weight: "3.23g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "370", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "45", injection1Pressure: "145", injection1Position: "48", injection2Speed: "55", injection2Pressure: "165", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "11.4", holdingPosition: "16.5", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "80", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "45", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "100", melting2Position: "35", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "100", melting3Position: "55" },
+                    "P": { dryingTemp: "90°C", weight: "3.23g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "370", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "45", injection1Pressure: "145", injection1Position: "48", injection2Speed: "55", injection2Pressure: "165", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "11.4", holdingPosition: "16.5", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "80", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "45", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "100", melting2Position: "35", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "100", melting3Position: "55" }
+                },
+                "PPE-LXS112": {
+                    "J": { dryingTemp: "90°C", weight: "3.23g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "370", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "45", injection1Pressure: "145", injection1Position: "48", injection2Speed: "55", injection2Pressure: "165", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "11.4", holdingPosition: "16.5", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "80", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "45", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "100", melting2Position: "35", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "100", melting3Position: "55" },
+                    "K": { dryingTemp: "90°C", weight: "3.23g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "370", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "45", injection1Pressure: "145", injection1Position: "48", injection2Speed: "55", injection2Pressure: "165", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "11.4", holdingPosition: "16.5", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "80", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "45", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "100", melting2Position: "35", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "100", melting3Position: "55" },
+                    "L": { dryingTemp: "90°C", weight: "3.23g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "370", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "45", injection1Pressure: "145", injection1Position: "48", injection2Speed: "55", injection2Pressure: "165", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "11.4", holdingPosition: "16.5", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "80", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "45", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "100", melting2Position: "35", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "100", melting3Position: "55" },
+                    "M": { dryingTemp: "90°C", weight: "3.23g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "370", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "45", injection1Pressure: "145", injection1Position: "48", injection2Speed: "55", injection2Pressure: "165", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "11.4", holdingPosition: "16.5", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "80", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "45", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "100", melting2Position: "35", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "100", melting3Position: "55" },
+                    "N": { dryingTemp: "90°C", weight: "3.23g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "370", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "45", injection1Pressure: "145", injection1Position: "48", injection2Speed: "55", injection2Pressure: "165", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "11.4", holdingPosition: "16.5", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "80", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "45", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "100", melting2Position: "35", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "100", melting3Position: "55" },
+                    "O": { dryingTemp: "90°C", weight: "3.23g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "370", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "45", injection1Pressure: "145", injection1Position: "48", injection2Speed: "55", injection2Pressure: "165", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "11.4", holdingPosition: "16.5", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "80", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "45", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "100", melting2Position: "35", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "100", melting3Position: "55" },
+                    "P": { dryingTemp: "90°C", weight: "3.23g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "370", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "45", injection1Pressure: "145", injection1Position: "48", injection2Speed: "55", injection2Pressure: "165", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "11.4", holdingPosition: "16.5", holdingTime: "2", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "80", holding2Time: "0.6", holding2Speed: "10", holding2Pressure: "45", melting1BackPressure: "10", melting1Speed: "50", melting1Pressure: "100", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "50", melting2Pressure: "100", melting2Position: "35", melting3BackPressure: "10", melting3Speed: "50", melting3Pressure: "100", melting3Position: "55" }
+                }
+            },
+            // 产品：KK 4mm
+            "KK 4mm": {
+                "PPO-PX9406": {
+                    "C": { dryingTemp: "110°C", weight: "0.656g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "320", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "280°C", barrel4: "275°C", injection1Speed: "75", injection1Pressure: "150", injection1Position: "35", injection2Speed: "45", injection2Pressure: "150", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "8.8", holdingPosition: "12", holdingTime: "2", holding1Time: "1", holding1Speed: "15", holding1Pressure: "95", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "40", melting1BackPressure: "6", melting1Speed: "55", melting1Pressure: "110", melting1Position: "10", melting2BackPressure: "6", melting2Speed: "55", melting2Pressure: "110", melting2Position: "25", melting3BackPressure: "6", melting3Speed: "55", melting3Pressure: "110", melting3Position: "35" },
+                    "H": { dryingTemp: "110°C", weight: "0.656g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "320", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "280°C", barrel4: "275°C", injection1Speed: "75", injection1Pressure: "150", injection1Position: "35", injection2Speed: "45", injection2Pressure: "150", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "8.8", holdingPosition: "12", holdingTime: "2", holding1Time: "1", holding1Speed: "15", holding1Pressure: "95", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "40", melting1BackPressure: "6", melting1Speed: "55", melting1Pressure: "110", melting1Position: "10", melting2BackPressure: "6", melting2Speed: "55", melting2Pressure: "110", melting2Position: "25", melting3BackPressure: "6", melting3Speed: "55", melting3Pressure: "110", melting3Position: "35" }
+                },
+                "PPE-1311": {
+                    "C": { dryingTemp: "90°C", weight: "0.656g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "320", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "280°C", barrel4: "275°C", injection1Speed: "75", injection1Pressure: "150", injection1Position: "35", injection2Speed: "45", injection2Pressure: "150", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "8.8", holdingPosition: "12", holdingTime: "2", holding1Time: "1", holding1Speed: "15", holding1Pressure: "95", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "40", melting1BackPressure: "6", melting1Speed: "55", melting1Pressure: "110", melting1Position: "10", melting2BackPressure: "6", melting2Speed: "55", melting2Pressure: "110", melting2Position: "25", melting3BackPressure: "6", melting3Speed: "55", melting3Pressure: "110", melting3Position: "35" },
+                    "H": { dryingTemp: "90°C", weight: "0.656g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "320", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "280°C", barrel4: "275°C", injection1Speed: "75", injection1Pressure: "150", injection1Position: "35", injection2Speed: "45", injection2Pressure: "150", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "8.8", holdingPosition: "12", holdingTime: "2", holding1Time: "1", holding1Speed: "15", holding1Pressure: "95", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "40", melting1BackPressure: "6", melting1Speed: "55", melting1Pressure: "110", melting1Position: "10", melting2BackPressure: "6", melting2Speed: "55", melting2Pressure: "110", melting2Position: "25", melting3BackPressure: "6", melting3Speed: "55", melting3Pressure: "110", melting3Position: "35" }
+                },
+                "PPE-LXS112": {
+                    "C": { dryingTemp: "90°C", weight: "0.656g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "320", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "280°C", barrel4: "275°C", injection1Speed: "75", injection1Pressure: "150", injection1Position: "35", injection2Speed: "45", injection2Pressure: "150", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "8.8", holdingPosition: "12", holdingTime: "2", holding1Time: "1", holding1Speed: "15", holding1Pressure: "95", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "40", melting1BackPressure: "6", melting1Speed: "55", melting1Pressure: "110", melting1Position: "10", melting2BackPressure: "6", melting2Speed: "55", melting2Pressure: "110", melting2Position: "25", melting3BackPressure: "6", melting3Speed: "55", melting3Pressure: "110", melting3Position: "35" },
+                    "H": { dryingTemp: "90°C", weight: "0.656g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "320", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "280°C", barrel4: "275°C", injection1Speed: "75", injection1Pressure: "150", injection1Position: "35", injection2Speed: "45", injection2Pressure: "150", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "8.8", holdingPosition: "12", holdingTime: "2", holding1Time: "1", holding1Speed: "15", holding1Pressure: "95", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "40", melting1BackPressure: "6", melting1Speed: "55", melting1Pressure: "110", melting1Position: "10", melting2BackPressure: "6", melting2Speed: "55", melting2Pressure: "110", melting2Position: "25", melting3BackPressure: "6", melting3Speed: "55", melting3Pressure: "110", melting3Position: "35" }
+                }
+            },
+            // 产品：KK 6mm
+            "KK 6mm": {
+                "PPO-PX9406": {
+                    "G": { dryingTemp: "110°C", weight: "0.656g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "320", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "280°C", barrel4: "275°C", injection1Speed: "75", injection1Pressure: "150", injection1Position: "35", injection2Speed: "45", injection2Pressure: "150", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "8.8", holdingPosition: "12", holdingTime: "2", holding1Time: "1", holding1Speed: "15", holding1Pressure: "95", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "40", melting1BackPressure: "6", melting1Speed: "55", melting1Pressure: "110", melting1Position: "10", melting2BackPressure: "6", melting2Speed: "55", melting2Pressure: "110", melting2Position: "25", melting3BackPressure: "6", melting3Speed: "55", melting3Pressure: "110", melting3Position: "35" }
+                },
+                "PPE-1311": {
+                    "G": { dryingTemp: "90°C", weight: "0.656g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "320", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "280°C", barrel4: "275°C", injection1Speed: "75", injection1Pressure: "150", injection1Position: "35", injection2Speed: "45", injection2Pressure: "150", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "8.8", holdingPosition: "12", holdingTime: "2", holding1Time: "1", holding1Speed: "15", holding1Pressure: "95", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "40", melting1BackPressure: "6", melting1Speed: "55", melting1Pressure: "110", melting1Position: "10", melting2BackPressure: "6", melting2Speed: "55", melting2Pressure: "110", melting2Position: "25", melting3BackPressure: "6", melting3Speed: "55", melting3Pressure: "110", melting3Position: "35" }
+                },
+                "PPE-LXS112": {
+                    "G": { dryingTemp: "90°C", weight: "0.656g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "300°C", moldOpeningEnd: "320", ejectionEnd: "20", nozzle: "290°C", barrel1: "295°C", barrel2: "290°C", barrel3: "280°C", barrel4: "275°C", injection1Speed: "75", injection1Pressure: "150", injection1Position: "35", injection2Speed: "45", injection2Pressure: "150", injection2Position: "25", injection3Speed: "35", injection3Pressure: "140", injection3Position: "", holdingEnd: "8.8", holdingPosition: "12", holdingTime: "2", holding1Time: "1", holding1Speed: "15", holding1Pressure: "95", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "40", melting1BackPressure: "6", melting1Speed: "55", melting1Pressure: "110", melting1Position: "10", melting2BackPressure: "6", melting2Speed: "55", melting2Pressure: "110", melting2Position: "25", melting3BackPressure: "6", melting3Speed: "55", melting3Pressure: "110", melting3Position: "35" }
+                }
+            },
+            // 产品：T6 -
+            "T6 -": {
+                "PPE-PV40Z": {
+                    "Q": { dryingTemp: "100°C", weight: "7.25g", fixedMoldTemp: "65°C", movingMoldTemp: "65°C", tempControlBox: "295°C", moldOpeningEnd: "380", ejectionEnd: "22", nozzle: "300°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "65", injection1Pressure: "140", injection1Position: "40", injection2Speed: "50", injection2Pressure: "140", injection2Position: "35", injection3Speed: "35", injection3Pressure: "120", injection3Position: "20", injection4Speed: "20", injection4Pressure: "100", injection4Position: "", holdingEnd: "7.9", holdingPosition: "8", holdingTime: "3", holding1Time: "1.2", holding1Speed: "10", holding1Pressure: "100", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "65", melting1BackPressure: "10", melting1Speed: "60", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "60", melting2Pressure: "110", melting2Position: "25", melting3BackPressure: "10", melting3Speed: "60", melting3Pressure: "110", melting3Position: "50" },
+                    "R": { dryingTemp: "100°C", weight: "7.25g", fixedMoldTemp: "65°C", movingMoldTemp: "65°C", tempControlBox: "295°C", moldOpeningEnd: "380", ejectionEnd: "22", nozzle: "300°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "65", injection1Pressure: "140", injection1Position: "40", injection2Speed: "50", injection2Pressure: "140", injection2Position: "35", injection3Speed: "35", injection3Pressure: "120", injection3Position: "20", injection4Speed: "20", injection4Pressure: "100", injection4Position: "", holdingEnd: "7.9", holdingPosition: "8", holdingTime: "3", holding1Time: "1.2", holding1Speed: "10", holding1Pressure: "100", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "65", melting1BackPressure: "10", melting1Speed: "60", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "60", melting2Pressure: "110", melting2Position: "25", melting3BackPressure: "10", melting3Speed: "60", melting3Pressure: "110", melting3Position: "50" },
+                    "S": { dryingTemp: "100°C", weight: "7.25g", fixedMoldTemp: "65°C", movingMoldTemp: "65°C", tempControlBox: "295°C", moldOpeningEnd: "380", ejectionEnd: "22", nozzle: "300°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "65", injection1Pressure: "140", injection1Position: "40", injection2Speed: "50", injection2Pressure: "140", injection2Position: "35", injection3Speed: "35", injection3Pressure: "120", injection3Position: "20", injection4Speed: "20", injection4Pressure: "100", injection4Position: "", holdingEnd: "7.9", holdingPosition: "8", holdingTime: "3", holding1Time: "1.2", holding1Speed: "10", holding1Pressure: "100", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "65", melting1BackPressure: "10", melting1Speed: "60", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "60", melting2Pressure: "110", melting2Position: "25", melting3BackPressure: "10", melting3Speed: "60", melting3Pressure: "110", melting3Position: "50" },
+                    "T": { dryingTemp: "100°C", weight: "7.25g", fixedMoldTemp: "65°C", movingMoldTemp: "65°C", tempControlBox: "295°C", moldOpeningEnd: "380", ejectionEnd: "22", nozzle: "300°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "65", injection1Pressure: "140", injection1Position: "40", injection2Speed: "50", injection2Pressure: "140", injection2Position: "35", injection3Speed: "35", injection3Pressure: "120", injection3Position: "20", injection4Speed: "20", injection4Pressure: "100", injection4Position: "", holdingEnd: "7.9", holdingPosition: "8", holdingTime: "3", holding1Time: "1.2", holding1Speed: "10", holding1Pressure: "100", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "65", melting1BackPressure: "10", melting1Speed: "60", melting1Pressure: "110", melting1Position: "15", melting2BackPressure: "10", melting2Speed: "60", melting2Pressure: "110", melting2Position: "25", melting3BackPressure: "10", melting3Speed: "60", melting3Pressure: "110", melting3Position: "50" }
+                }
+            },
+            // 产品：T6 +
+            "T6 +": {
+                "PPE-PV40Z": {
+                    "Q": { dryingTemp: "100°C", weight: "4.465g", fixedMoldTemp: "65°C", movingMoldTemp: "65°C", tempControlBox: "295°C", moldOpeningEnd: "380", ejectionEnd: "22", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "80", injection1Pressure: "140", injection1Position: "32", injection2Speed: "70", injection2Pressure: "140", injection2Position: "27", injection3Speed: "35", injection3Pressure: "100", injection3Position: "20", injection4Speed: "25", injection4Pressure: "100", injection4Position: "", holdingEnd: "8.12", holdingPosition: "6", holdingTime: "4", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "85", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "40", melting1BackPressure: "10", melting1Speed: "55", melting1Pressure: "110", melting1Position: "10", melting2BackPressure: "10", melting2Speed: "55", melting2Pressure: "110", melting2Position: "25", melting3BackPressure: "10", melting3Speed: "55", melting3Pressure: "110", melting3Position: "40" },
+                    "R": { dryingTemp: "100°C", weight: "4.465g", fixedMoldTemp: "65°C", movingMoldTemp: "65°C", tempControlBox: "295°C", moldOpeningEnd: "380", ejectionEnd: "22", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "80", injection1Pressure: "140", injection1Position: "32", injection2Speed: "70", injection2Pressure: "140", injection2Position: "27", injection3Speed: "35", injection3Pressure: "100", injection3Position: "20", injection4Speed: "25", injection4Pressure: "100", injection4Position: "", holdingEnd: "8.12", holdingPosition: "6", holdingTime: "4", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "85", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "40", melting1BackPressure: "10", melting1Speed: "55", melting1Pressure: "110", melting1Position: "10", melting2BackPressure: "10", melting2Speed: "55", melting2Pressure: "110", melting2Position: "25", melting3BackPressure: "10", melting3Speed: "55", melting3Pressure: "110", melting3Position: "40" },
+                    "S": { dryingTemp: "100°C", weight: "4.465g", fixedMoldTemp: "65°C", movingMoldTemp: "65°C", tempControlBox: "295°C", moldOpeningEnd: "380", ejectionEnd: "22", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "80", injection1Pressure: "140", injection1Position: "32", injection2Speed: "70", injection2Pressure: "140", injection2Position: "27", injection3Speed: "35", injection3Pressure: "100", injection3Position: "20", injection4Speed: "25", injection4Pressure: "100", injection4Position: "", holdingEnd: "8.12", holdingPosition: "6", holdingTime: "4", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "85", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "40", melting1BackPressure: "10", melting1Speed: "55", melting1Pressure: "110", melting1Position: "10", melting2BackPressure: "10", melting2Speed: "55", melting2Pressure: "110", melting2Position: "25", melting3BackPressure: "10", melting3Speed: "55", melting3Pressure: "110", melting3Position: "40" },
+                    "T": { dryingTemp: "100°C", weight: "4.465g", fixedMoldTemp: "65°C", movingMoldTemp: "65°C", tempControlBox: "295°C", moldOpeningEnd: "380", ejectionEnd: "22", nozzle: "295°C", barrel1: "295°C", barrel2: "290°C", barrel3: "285°C", barrel4: "280°C", injection1Speed: "80", injection1Pressure: "140", injection1Position: "32", injection2Speed: "70", injection2Pressure: "140", injection2Position: "27", injection3Speed: "35", injection3Pressure: "100", injection3Position: "20", injection4Speed: "25", injection4Pressure: "100", injection4Position: "", holdingEnd: "8.12", holdingPosition: "6", holdingTime: "4", holding1Time: "1.5", holding1Speed: "15", holding1Pressure: "85", holding2Time: "0.5", holding2Speed: "10", holding2Pressure: "40", melting1BackPressure: "10", melting1Speed: "55", melting1Pressure: "110", melting1Position: "10", melting2BackPressure: "10", melting2Speed: "55", melting2Pressure: "110", melting2Position: "25", melting3BackPressure: "10", melting3Speed: "55", melting3Pressure: "110", melting3Position: "40" }
+                }
+            },
+            // 产品：T6 LM (包含绞牙数据)
+            "T6 LM": {
+                "PA66-A3XGZ5": {
+                    "Q": { dryingTemp: "110°C", weight: "3.18g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "418", ejectionEnd: "40", nozzle: "290°C", barrel1: "290°C", barrel2: "280°C", barrel3: "275°C", barrel4: "265°C", injection1Speed: "30", injection1Pressure: "130", injection1Position: "42", injection2Speed: "50", injection2Pressure: "130", injection2Position: "20", injection3Speed: "10", injection3Pressure: "110", injection3Position: "", holdingEnd: "12", holdingPosition: "16", holdingTime: "3", holding1Time: "1", holding1Speed: "15", holding1Pressure: "70", holding2Time: "", holding2Speed: "", holding2Pressure: "", melting1BackPressure: "8", melting1Speed: "50", melting1Pressure: "110", melting1Position: "10", melting2BackPressure: "8", melting2Speed: "50", melting2Pressure: "110", melting2Position: "25", melting3BackPressure: "8", melting3Speed: "50", melting3Pressure: "110", melting3Position: "45", // 绞牙参数
+                        screwInTime: "3", screwInSpeed: "30", screwInPressure: "110", screwOutTime: "1", screwOutSpeed: "50", screwOutPressure: "130", screwActionOrder: "开模退，合模进" },
+                    "R": { dryingTemp: "110°C", weight: "3.18g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "418", ejectionEnd: "40", nozzle: "290°C", barrel1: "290°C", barrel2: "280°C", barrel3: "275°C", barrel4: "265°C", injection1Speed: "30", injection1Pressure: "130", injection1Position: "42", injection2Speed: "50", injection2Pressure: "130", injection2Position: "20", injection3Speed: "10", injection3Pressure: "110", injection3Position: "", holdingEnd: "12", holdingPosition: "16", holdingTime: "3", holding1Time: "1", holding1Speed: "15", holding1Pressure: "70", holding2Time: "", holding2Speed: "", holding2Pressure: "", melting1BackPressure: "8", melting1Speed: "50", melting1Pressure: "110", melting1Position: "10", melting2BackPressure: "8", melting2Speed: "50", melting2Pressure: "110", melting2Position: "25", melting3BackPressure: "8", melting3Speed: "50", melting3Pressure: "110", melting3Position: "45",
+                        screwInTime: "3", screwInSpeed: "30", screwInPressure: "110", screwOutTime: "1", screwOutSpeed: "50", screwOutPressure: "130", screwActionOrder: "开模退，合模进" },
+                    "S": { dryingTemp: "110°C", weight: "3.18g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "418", ejectionEnd: "40", nozzle: "290°C", barrel1: "290°C", barrel2: "280°C", barrel3: "275°C", barrel4: "265°C", injection1Speed: "30", injection1Pressure: "130", injection1Position: "42", injection2Speed: "50", injection2Pressure: "130", injection2Position: "20", injection3Speed: "10", injection3Pressure: "110", injection3Position: "", holdingEnd: "12", holdingPosition: "16", holdingTime: "3", holding1Time: "1", holding1Speed: "15", holding1Pressure: "70", holding2Time: "", holding2Speed: "", holding2Pressure: "", melting1BackPressure: "8", melting1Speed: "50", melting1Pressure: "110", melting1Position: "10", melting2BackPressure: "8", melting2Speed: "50", melting2Pressure: "110", melting2Position: "25", melting3BackPressure: "8", melting3Speed: "50", melting3Pressure: "110", melting3Position: "45",
+                        screwInTime: "3", screwInSpeed: "30", screwInPressure: "110", screwOutTime: "1", screwOutSpeed: "50", screwOutPressure: "130", screwActionOrder: "开模退，合模进" },
+                    "P": { dryingTemp: "110°C", weight: "3.18g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "418", ejectionEnd: "40", nozzle: "290°C", barrel1: "290°C", barrel2: "280°C", barrel3: "275°C", barrel4: "265°C", injection1Speed: "30", injection1Pressure: "130", injection1Position: "42", injection2Speed: "50", injection2Pressure: "130", injection2Position: "20", injection3Speed: "10", injection3Pressure: "110", injection3Position: "", holdingEnd: "12", holdingPosition: "16", holdingTime: "3", holding1Time: "1", holding1Speed: "15", holding1Pressure: "70", holding2Time: "", holding2Speed: "", holding2Pressure: "", melting1BackPressure: "8", melting1Speed: "50", melting1Pressure: "110", melting1Position: "10", melting2BackPressure: "8", melting2Speed: "50", melting2Pressure: "110", melting2Position: "25", melting3BackPressure: "8", melting3Speed: "50", melting3Pressure: "110", melting3Position: "45",
+                        screwInTime: "3", screwInSpeed: "30", screwInPressure: "110", screwOutTime: "1", screwOutSpeed: "50", screwOutPressure: "130", screwActionOrder: "开模退，合模进" }
+                },
+                "PA66-T30325GF": {
+                    "Q": { dryingTemp: "110°C", weight: "3.18g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "418", ejectionEnd: "40", nozzle: "290°C", barrel1: "290°C", barrel2: "280°C", barrel3: "275°C", barrel4: "265°C", injection1Speed: "30", injection1Pressure: "130", injection1Position: "42", injection2Speed: "50", injection2Pressure: "130", injection2Position: "20", injection3Speed: "10", injection3Pressure: "110", injection3Position: "", holdingEnd: "12", holdingPosition: "16", holdingTime: "3", holding1Time: "1", holding1Speed: "15", holding1Pressure: "70", holding2Time: "", holding2Speed: "", holding2Pressure: "", melting1BackPressure: "8", melting1Speed: "50", melting1Pressure: "110", melting1Position: "10", melting2BackPressure: "8", melting2Speed: "50", melting2Pressure: "110", melting2Position: "25", melting3BackPressure: "8", melting3Speed: "50", melting3Pressure: "110", melting3Position: "45",
+                        screwInTime: "3", screwInSpeed: "30", screwInPressure: "110", screwOutTime: "1", screwOutSpeed: "50", screwOutPressure: "130", screwActionOrder: "开模退，合模进" },
+                    "R": { dryingTemp: "110°C", weight: "3.18g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "418", ejectionEnd: "40", nozzle: "290°C", barrel1: "290°C", barrel2: "280°C", barrel3: "275°C", barrel4: "265°C", injection1Speed: "30", injection1Pressure: "130", injection1Position: "42", injection2Speed: "50", injection2Pressure: "130", injection2Position: "20", injection3Speed: "10", injection3Pressure: "110", injection3Position: "", holdingEnd: "12", holdingPosition: "16", holdingTime: "3", holding1Time: "1", holding1Speed: "15", holding1Pressure: "70", holding2Time: "", holding2Speed: "", holding2Pressure: "", melting1BackPressure: "8", melting1Speed: "50", melting1Pressure: "110", melting1Position: "10", melting2BackPressure: "8", melting2Speed: "50", melting2Pressure: "110", melting2Position: "25", melting3BackPressure: "8", melting3Speed: "50", melting3Pressure: "110", melting3Position: "45",
+                        screwInTime: "3", screwInSpeed: "30", screwInPressure: "110", screwOutTime: "1", screwOutSpeed: "50", screwOutPressure: "130", screwActionOrder: "开模退，合模进" },
+                    "S": { dryingTemp: "110°C", weight: "3.18g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "418", ejectionEnd: "40", nozzle: "290°C", barrel1: "290°C", barrel2: "280°C", barrel3: "275°C", barrel4: "265°C", injection1Speed: "30", injection1Pressure: "130", injection1Position: "42", injection2Speed: "50", injection2Pressure: "130", injection2Position: "20", injection3Speed: "10", injection3Pressure: "110", injection3Position: "", holdingEnd: "12", holdingPosition: "16", holdingTime: "3", holding1Time: "1", holding1Speed: "15", holding1Pressure: "70", holding2Time: "", holding2Speed: "", holding2Pressure: "", melting1BackPressure: "8", melting1Speed: "50", melting1Pressure: "110", melting1Position: "10", melting2BackPressure: "8", melting2Speed: "50", melting2Pressure: "110", melting2Position: "25", melting3BackPressure: "8", melting3Speed: "50", melting3Pressure: "110", melting3Position: "45",
+                        screwInTime: "3", screwInSpeed: "30", screwInPressure: "110", screwOutTime: "1", screwOutSpeed: "50", screwOutPressure: "130", screwActionOrder: "开模退，合模进" },
+                    "P": { dryingTemp: "110°C", weight: "3.18g", fixedMoldTemp: "60°C", movingMoldTemp: "60°C", tempControlBox: "290°C", moldOpeningEnd: "418", ejectionEnd: "40", nozzle: "290°C", barrel1: "290°C", barrel2: "280°C", barrel3: "275°C", barrel4: "265°C", injection1Speed: "30", injection1Pressure: "130", injection1Position: "42", injection2Speed: "50", injection2Pressure: "130", injection2Position: "20", injection3Speed: "10", injection3Pressure: "110", injection3Position: "", holdingEnd: "12", holdingPosition: "16", holdingTime: "3", holding1Time: "1", holding1Speed: "15", holding1Pressure: "70", holding2Time: "", holding2Speed: "", holding2Pressure: "", melting1BackPressure: "8", melting1Speed: "50", melting1Pressure: "110", melting1Position: "10", melting2BackPressure: "8", melting2Speed: "50", melting2Pressure: "110", melting2Position: "25", melting3BackPressure: "8", melting3Speed: "50", melting3Pressure: "110", melting3Position: "45",
+                        screwInTime: "3", screwInSpeed: "30", screwInPressure: "110", screwOutTime: "1", screwOutSpeed: "50", screwOutPressure: "130", screwActionOrder: "开模退，合模进" }
+                }
+            }
+        };
+
+        // ==================== 全局变量 ====================
+        let currentUser = null;
+        let feedbackCount = 0;
+
+        // ==================== 初始化 ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化 EmailJS
+            if (CONFIG.EMAILJS_PUBLIC_KEY && CONFIG.EMAILJS_PUBLIC_KEY !== '请填写您的EmailJS Public Key') {
+                emailjs.init(CONFIG.EMAILJS_PUBLIC_KEY);
+            }
+
+            // 获取 URL 中的机台 ID 并显示
+            const urlParams = new URLSearchParams(window.location.search);
+            const machineIdFromUrl = urlParams.get('id'); // 获取 ?id= 后的值
+            const machineTag = document.getElementById('machineId');
+            if (machineIdFromUrl && machineTag) {
+                machineTag.innerText = machineIdFromUrl + " 号机";
+                window.currentMachineId = machineIdFromUrl; // 供反馈使用
+            } else {
+                machineTag.innerText = "未知机台";
+            }
+
+            // 语言切换按钮
+            document.getElementById('langSwitchBtn').addEventListener('click', function() {
+                currentLang = currentLang === 'zh' ? 'vi' : 'zh';
+                updateUILanguage();
+                // 如果当前参数区域可见，重新渲染以更新标题等
+                if (document.getElementById('paramsSection').classList.contains('show')) {
+                    showParameters(); // 重新调用显示参数
+                }
+                // 更新反馈计数器显示
+                updateFeedbackCounter();
+                refreshWatermark();
+            });
+
+            loadProducts();
+
+            // 自动匹配：如果机台 ID 存在于映射表中，则自动选择对应的产品、材料、模具并显示参数
+            if (machineIdFromUrl && machineMapping[machineIdFromUrl]) {
+                const mapping = machineMapping[machineIdFromUrl];
+                const productSelect = document.getElementById('productSelect');
+                const materialSelect = document.getElementById('materialSelect');
+                const moldSelect = document.getElementById('moldSelect');
+
+                // 设置产品
+                productSelect.value = mapping.product;
+                onProductChange(); // 填充材料选项
+
+                // 设置材料
+                materialSelect.value = mapping.material;
+                onMaterialChange(); // 填充模具选项
+
+                // 设置模具
+                moldSelect.value = mapping.mold;
+                onMoldChange(); // 更新按钮状态
+
+                // 自动点击查看参数按钮
+                document.getElementById('viewParamsBtn').click();
+            }
+            
+            document.getElementById('productSelect').addEventListener('change', onProductChange);
+            document.getElementById('materialSelect').addEventListener('change', onMaterialChange);
+            document.getElementById('moldSelect').addEventListener('change', onMoldChange);
+            document.getElementById('viewParamsBtn').addEventListener('click', showParameters);
+            document.getElementById('feedbackBtn').addEventListener('click', showFeedbackForm);
+
+            loadUserInfo();
+            loadFeedbackCount();
+
+            initWatermark(machineIdFromUrl || "未知机台");
+
+            document.addEventListener('contextmenu', e => e.preventDefault());
+            document.addEventListener('copy', e => e.preventDefault());
+            document.addEventListener('cut', e => e.preventDefault());
+        });
+
+        // 更新界面语言 (修复：不再修改机台号)
+        function updateUILanguage() {
+            // 更新所有带 data-i18n 属性的元素
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                el.innerText = t(key);
+            });
+            // 更新select中的placeholder选项（option）
+            document.querySelectorAll('select option[data-i18n]').forEach(opt => {
+                opt.innerText = t(opt.getAttribute('data-i18n'));
+            });
+            // 注意：机台号（machineId）是动态内容，不在此处修改，保持原有值
+        }
+
+        // 登录弹窗使用i18n
+        function showLogin(forceFirst = false) {
+            Swal.fire({
+                title: t('login_title'),
+                html: `
+                    <div style="text-align: left;">
+                        <p style="color: #666; margin-bottom: 15px;">${t('login_desc')}</p>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">${t('login_name_label')} <span style="color: red;">*</span></label>
+                            <input type="text" id="userName" placeholder="${t('login_name_label')}" 
+                                style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px;">
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">${t('login_dept_label')}</label>
+                            <input type="text" id="userDept" placeholder="${t('login_dept_label')}" 
+                                style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px;">
+                        </div>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px; font-weight: 600;">${t('login_contact_label')}</label>
+                            <input type="text" id="userContact" placeholder="${t('login_contact_label')}" 
+                                style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px;">
+                        </div>
+                    </div>
+                `,
+                showCancelButton: !forceFirst,
+                confirmButtonText: t('login_save'),
+                cancelButtonText: t('login_cancel'),
+                allowOutsideClick: false,
+                preConfirm: () => {
+                    const name = document.getElementById('userName').value.trim();
+                    if (!name) {
+                        Swal.showValidationMessage(t('login_required'));
+                        return false;
+                    }
+                    const dept = document.getElementById('userDept').value.trim();
+                    const contact = document.getElementById('userContact').value.trim();
+                    return { name, dept, contact };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.setItem('injection_user', JSON.stringify(result.value));
+                    currentUser = result.value;
+                    updateUserStatus();
+                    refreshWatermark();
+                    Swal.fire({ title: t('login_success'), icon: 'success', timer: 1500, showConfirmButton: false });
+                } else if (forceFirst) {
+                    showLogin(true);
+                }
+            });
+        }
+
+        // 反馈弹窗使用i18n
+        function showFeedbackForm() {
+            // 强制登录检查
+            if (!currentUser) {
+                Swal.fire({
+                    title: t('need_login_title'),
+                    text: t('need_login_text_feedback'),
+                    icon: 'warning',
+                    confirmButtonText: t('go_set'),
+                    allowOutsideClick: false
+                }).then(() => {
+                    showLogin();
+                });
+                return;
+            }
+
+            const product = document.getElementById('productSelect').value || '未选择';
+            const material = document.getElementById('materialSelect').value || '未选择';
+            const mold = document.getElementById('moldSelect').value || '未选择';
+            const machineId = document.getElementById('machineId').textContent;
+            
+            let userInfoHtml = `<div style="background: #f0f9ff; padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #bae0ff;"><p style="margin: 0; font-size: 14px; color: #0066cc;"><strong>${t('feedback_btn')}:</strong> ${currentUser.name}${currentUser.dept ? `(${currentUser.dept})` : ''}</p></div>`;
+            
+            Swal.fire({
+                title: t('feedback_title'),
+                html: `<div style="text-align: left; max-height: 500px; overflow-y: auto;">${userInfoHtml}<div style="margin-bottom: 15px;"><label style="display: block; margin-bottom: 5px; font-weight: 600;">${t('feedback_type_label')}</label><select id="fbType" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; margin-bottom:15px;"><option value="参数不一致">${t('feedback_type1')}</option><option value="操作问题">${t('feedback_type2')}</option><option value="设备故障">${t('feedback_type3')}</option><option value="材料问题">${t('feedback_type4')}</option><option value="改进建议">${t('feedback_type5')}</option><option value="其他">${t('feedback_type6')}</option></select></div><div style="margin-bottom: 15px;"><label style="display: block; margin-bottom: 5px; font-weight: 600;">${t('feedback_content_label')}</label><textarea id="fbContent" placeholder="${t('feedback_placeholder')}" style="width:100%; min-height:120px; padding:10px; border:1px solid #ddd; border-radius:6px; resize: vertical;"></textarea></div><div style="margin-top: 15px;"><label><input type="checkbox" id="fbUrgent" style="margin-right: 5px;"><strong>${t('feedback_urgent')}</strong></label></div></div>`,
+                showCancelButton: true,
+                confirmButtonText: t('feedback_submit'),
+                confirmButtonColor: '#ffa940',
+                preConfirm: () => {
+                    const type = document.getElementById('fbType').value;
+                    const content = document.getElementById('fbContent').value;
+                    const urgent = document.getElementById('fbUrgent').checked;
+                    if (!content.trim()) { Swal.showValidationMessage(t('feedback_required')); return false; }
+                    return { 
+                        product, material, mold, machineId, 
+                        user_name: currentUser.name, 
+                        user_dept: currentUser.dept || '', 
+                        type, content, urgent, 
+                        timestamp: new Date().toISOString(), 
+                        page_url: window.location.href 
+                    };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    submitFeedback(result.value);
+                }
+            });
+        }
+
+        // ==================== 以下为原有函数，但需要修改 showParameters 中的静态文本 ====================
+        function showParameters() {
+            // 强制登录检查
+            if (!currentUser) {
+                Swal.fire({
+                    title: t('need_login_title'),
+                    text: t('need_login_text'),
+                    icon: 'warning',
+                    confirmButtonText: t('go_set'),
+                    allowOutsideClick: false
+                }).then(() => {
+                    showLogin();
+                });
+                return;
+            }
+
+            const product = document.getElementById('productSelect').value;
+            const material = document.getElementById('materialSelect').value;
+            const mold = document.getElementById('moldSelect').value;
+            if (!product || !material || !mold) {
+                Swal.fire(t('warning_select_complete'), t('warning_select_text'), 'warning');
+                return;
+            }
+            const params = processDatabase[product][material][mold];
+            
+            // 构建射出表格行（最多四段）
+            let injectionRows = `
+                <tr><td>${t('table_stage')}1</td><td>${params.injection1Speed}</td><td>${params.injection1Pressure}</td><td>${params.injection1Position}</td></tr>
+                <tr><td>${t('table_stage')}2</td><td>${params.injection2Speed}</td><td>${params.injection2Pressure}</td><td>${params.injection2Position}</td></tr>
+                <tr><td>${t('table_stage')}3</td><td>${params.injection3Speed}</td><td>${params.injection3Pressure}</td><td>${params.injection3Position || '-'}</td></tr>
+            `;
+            if (params.injection4Speed !== undefined && params.injection4Speed !== '') {
+                injectionRows += `<tr><td>${t('table_stage')}4</td><td>${params.injection4Speed}</td><td>${params.injection4Pressure}</td><td>${params.injection4Position || '-'}</td></tr>`;
+            }
+
+            // 绞牙参数区域（如果存在）
+            let screwHtml = '';
+            if (params.screwActionOrder !== undefined) {
+                screwHtml = `
+                    <div class="section-title"><i class="fas fa-cog"></i> ${t('screw_params')}</div>
+                    <div class="param-grid">
+                        <div class="param-item"><div class="param-label">${t('screw_in_time')}</div><div class="param-value">${params.screwInTime}</div></div>
+                        <div class="param-item"><div class="param-label">${t('screw_in_speed')}</div><div class="param-value">${params.screwInSpeed}</div></div>
+                        <div class="param-item"><div class="param-label">${t('screw_in_pressure')}</div><div class="param-value">${params.screwInPressure}</div></div>
+                        <div class="param-item"><div class="param-label">${t('screw_out_time')}</div><div class="param-value">${params.screwOutTime}</div></div>
+                        <div class="param-item"><div class="param-label">${t('screw_out_speed')}</div><div class="param-value">${params.screwOutSpeed}</div></div>
+                        <div class="param-item"><div class="param-label">${t('screw_out_pressure')}</div><div class="param-value">${params.screwOutPressure}</div></div>
+                        <div class="param-item"><div class="param-label">${t('screw_action_order')}</div><div class="param-value">${params.screwActionOrder}</div></div>
+                    </div>
+                `;
+            }
+
+            let html = `
+                <div class="section-title"><i class="fas fa-info-circle"></i> ${t('base_params', { mold })}</div>
+                <div class="param-grid">
+                    <div class="param-item"><div class="param-label">${t('drying_temp')}</div><div class="param-value">${params.dryingTemp}</div></div>
+                    <div class="param-item"><div class="param-label">${t('weight')}</div><div class="param-value important">${params.weight}</div></div>
+                    <div class="param-item"><div class="param-label">${t('fixed_mold_temp')}</div><div class="param-value">${params.fixedMoldTemp}</div></div>
+                    <div class="param-item"><div class="param-label">${t('moving_mold_temp')}</div><div class="param-value">${params.movingMoldTemp}</div></div>
+                    <div class="param-item"><div class="param-label">${t('temp_control_box')}</div><div class="param-value">${params.tempControlBox}</div></div>
+                    <div class="param-item"><div class="param-label">${t('mold_opening_end')}</div><div class="param-value important">${params.moldOpeningEnd}</div></div>
+                    <div class="param-item"><div class="param-label">${t('ejection_end')}</div><div class="param-value important">${params.ejectionEnd}</div></div>
+                </div>
+                <div class="section-title"><i class="fas fa-thermometer-half"></i> ${t('temp_params')}</div>
+                <table class="param-table"><tr><th>${t('table_nozzle')}</th><th>${t('table_barrel1')}</th><th>${t('table_barrel2')}</th><th>${t('table_barrel3')}</th><th>${t('table_barrel4')}</th></tr>
+                <tr><td>${params.nozzle}</td><td>${params.barrel1}</td><td>${params.barrel2}</td><td>${params.barrel3}</td><td>${params.barrel4}</td></tr></table>
+                <div class="section-title"><i class="fas fa-tint"></i> ${t('injection_params')}</div>
+                <table class="param-table"><tr><th>${t('table_stage')}</th><th>${t('table_speed')}</th><th>${t('table_pressure')}</th><th>${t('table_position')}</th></tr>
+                ${injectionRows}
+                </table>
+                <div class="section-title"><i class="fas fa-bolt"></i> ${t('holding_params')}</div>
+                <div class="param-grid"><div class="param-item"><div class="param-label">${t('holding_end')}</div><div class="param-value">${params.holdingEnd}</div></div>
+                <div class="param-item"><div class="param-label">${t('holding_position')}</div><div class="param-value">${params.holdingPosition}</div></div>
+                <div class="param-item"><div class="param-label">${t('holding_time')}</div><div class="param-value important">${params.holdingTime}</div></div></div>
+                <div style="margin-top: 15px; font-size: 13px; color: #666;"><strong>${t('holding_first')}</strong> ${t('time')}: ${params.holding1Time} | ${t('speed')}: ${params.holding1Speed} | ${t('pressure')}: ${params.holding1Pressure}</div>
+                ${params.holding2Time ? `<div style="margin-top: 10px; font-size: 13px; color: #666;"><strong>${t('holding_second')}</strong> ${t('time')}: ${params.holding2Time} | ${t('speed')}: ${params.holding2Speed} | ${t('pressure')}: ${params.holding2Pressure}</div>` : ''}
+                <div class="section-title"><i class="fas fa-recycle"></i> ${t('melting_params')}</div>
+                <table class="param-table"><tr><th>${t('table_stage')}</th><th>${t('table_backpressure')}</th><th>${t('table_speed')}</th><th>${t('table_melt_pressure')}</th><th>${t('table_position')}</th></tr>
+                <tr><td>1</td><td>${params.melting1BackPressure}</td><td>${params.melting1Speed}</td><td>${params.melting1Pressure}</td><td>${params.melting1Position}</td></tr>
+                <tr><td>2</td><td>${params.melting2BackPressure}</td><td>${params.melting2Speed}</td><td>${params.melting2Pressure}</td><td>${params.melting2Position}</td></tr>
+                <tr><td>3</td><td>${params.melting3BackPressure}</td><td>${params.melting3Speed}</td><td>${params.melting3Pressure}</td><td>${params.melting3Position}</td></tr></table>
+                ${screwHtml}
+                <div style="background: #f0f7ff; padding: 15px; border-radius: 8px; margin-top: 20px; border: 1px solid #e8f1ff;"><div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;"><i class="fas fa-lightbulb" style="color: #0052d9;"></i><strong>${t('tip')}</strong></div><p style="margin: 0; font-size: 13px; color: #666;">${t('tip_text')}</p></div>
+            `;
+            document.getElementById('paramsSection').innerHTML = html;
+            document.getElementById('paramsSection').classList.add('show');
+            document.getElementById('paramsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // 其余函数基本不变，但需要在需要翻译的地方使用 t()，例如用户状态、反馈计数器等
+        function updateUserStatus() {
+            const userStatusDiv = document.getElementById('userStatus');
+            if (currentUser) {
+                userStatusDiv.innerHTML = `<div style="display: inline-flex; align-items: center; gap: 8px; background: #f0f9ff; padding: 6px 12px; border-radius: 16px;"><div style="width: 24px; height: 24px; border-radius: 50%; background: #0052d9; color: white; display: flex; align-items: center; justify-content: center; font-size: 12px;">${currentUser.name.charAt(0)}</div><span>${currentUser.name}</span><button onclick="logout()" style="background: none; border: none; color: #999; font-size: 12px; cursor: pointer;">${t('logout') || '退出'}</button></div>`;
+            } else {
+                userStatusDiv.innerHTML = `${t('user_status_anonymous')}<span class="login-link" onclick="showLogin()">${t('set_personal_info')}</span>`;
+            }
+        }
+
+        function updateFeedbackCounter() {
+            const counter = document.getElementById('feedbackCounter');
+            if (feedbackCount > 0) {
+                counter.innerHTML = t('feedback_counter', { count: feedbackCount });
+                counter.style.color = '#ffa940';
+            } else {
+                counter.innerHTML = '';
+            }
+        }
+
+        // 水印
+        function initWatermark(machineId) {
+            updateWatermark(machineId);
+            setInterval(() => updateWatermark(machineId), 30000);
+        }
+
+        function updateWatermark(machineId) {
+            const layer = document.getElementById('watermark-layer');
+            if (!layer) return;
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('zh-CN', { hour12: false, hour: '2-digit', minute: '2-digit' });
+            const dateStr = now.toLocaleDateString('zh-CN');
+            const userName = currentUser ? currentUser.name : '匿名';
+            const baseText = `${machineId} | ${userName} | ${dateStr} ${timeStr}`;
+            let items = '';
+            for (let i = 0; i < 12; i++) {
+                items += `<span class="watermark-item">${baseText}</span>`;
+            }
+            layer.innerHTML = items;
+        }
+
+        function refreshWatermark() {
+            const machineId = document.getElementById('machineId').textContent;
+            updateWatermark(machineId);
+        }
+
+        // 产品/材料/模具 函数
+        function loadProducts() {
+            const productSelect = document.getElementById('productSelect');
+            const products = Object.keys(processDatabase);
+            products.forEach(product => {
+                const option = document.createElement('option');
+                option.value = product;
+                option.textContent = product;
+                productSelect.appendChild(option);
+            });
+        }
+
+        function onProductChange() {
+            const product = document.getElementById('productSelect').value;
+            const materialSelect = document.getElementById('materialSelect');
+            const moldSelect = document.getElementById('moldSelect');
+            
+            materialSelect.innerHTML = '<option value="" data-i18n="material_placeholder">' + t('material_placeholder') + '</option>';
+            materialSelect.disabled = !product;
+            moldSelect.innerHTML = '<option value="" data-i18n="mold_placeholder">' + t('mold_placeholder') + '</option>';
+            moldSelect.disabled = true;
+            updateViewButton();
+            
+            if (product) {
+                const materials = Object.keys(processDatabase[product]);
+                materials.forEach(material => {
+                    const option = document.createElement('option');
+                    option.value = material;
+                    option.textContent = material;
+                    materialSelect.appendChild(option);
+                });
+            }
+            // 更新语言属性
+            updateUILanguage();
+        }
+
+        function onMaterialChange() {
+            const product = document.getElementById('productSelect').value;
+            const material = document.getElementById('materialSelect').value;
+            const moldSelect = document.getElementById('moldSelect');
+            
+            moldSelect.innerHTML = '<option value="" data-i18n="mold_placeholder">' + t('mold_placeholder') + '</option>';
+            moldSelect.disabled = !product || !material;
+            updateViewButton();
+            
+            if (product && material) {
+                const molds = Object.keys(processDatabase[product][material]);
+                molds.forEach(mold => {
+                    const option = document.createElement('option');
+                    option.value = mold;
+                    option.textContent = `模具 ${mold}`;
+                    moldSelect.appendChild(option);
+                });
+            }
+            updateUILanguage();
+        }
+
+        function onMoldChange() {
+            updateViewButton();
+        }
+
+        function updateViewButton() {
+            const product = document.getElementById('productSelect').value;
+            const material = document.getElementById('materialSelect').value;
+            const mold = document.getElementById('moldSelect').value;
+            document.getElementById('viewParamsBtn').disabled = !(product && material && mold);
+        }
+
+            // 反馈相关
+        function submitFeedback(feedbackData) {
+            // --- Airtable 配置 ---
+            // 🚨 请务必将下方引号内的文字替换为你申请到的那个 pat... 开头的字符串
+            const AIRTABLE_TOKEN = 'patmwwKTnjhzz3P4X.a2cba8ef2be95efe4019ae2c435573cb7ab2615a29f18d364aacb831504c0303'; 
+            const BASE_ID = 'app4BOISlcFuPZFdd';
+            const TABLE_ID = 'tbl240rBBEgoaB2nm';
+
+            feedbackCount++;
+            updateFeedbackCounter();
+            saveFeedbackToLocal(feedbackData);
+
+            // 1. 原有的微信推送
+            pushToWeChat(feedbackData);
+
+            // 2. 原有的邮件发送逻辑
+            if (CONFIG.EMAILJS_PUBLIC_KEY && CONFIG.EMAILJS_PUBLIC_KEY !== '请填写您的EmailJS Public Key') {
+                sendEmailViaEmailJS(feedbackData);
+            } else {
+                console.warn('EmailJS Public Key 未配置，邮件未发送');
+            }
+
+            // 3. 新增：自动保存到 Airtable
+            const airtableUrl = `https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}`;
+            const payload = {
+                records: [{
+                    fields: {
+                        "machineId": feedbackData.machineId || "",
+                        "user_name": feedbackData.user_name || "",
+                        "content": feedbackData.content || "",
+                        "time": new Date().toISOString()
+                    }
+                }]
+            };
+
+            fetch(airtableUrl, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${AIRTABLE_TOKEN}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(res => { 
+                if(res.ok) {
+                    console.log('✅ Airtable 保存成功');
+                } else {
+                    console.error('❌ Airtable 保存失败，请检查 Token 权限或列名');
+                }
+            })
+            .catch(err => console.error('Airtable 网络错误:', err));
+
+            // 4. 弹出成功提示
+            Swal.fire({
+                title: t('feedback_success') || '提交成功',
+                text: t('feedback_success_text') || '您的反馈已同步至系统',
+                icon: 'success',
+                confirmButtonText: t('ok') || '确定'
+            });
+        }
+
+        function pushToWeChat(data) {
+            if (!CONFIG.serverChanKey) return;
+            const title = `${data.urgent ? '🚨紧急' : '📝'}注塑反馈：${data.machineId}`;
+            const desp = `**反馈人**: ${data.user_name}\n**类型**: ${data.type}\n**内容**: ${data.content}\n\n[点击查看看板](${data.page_url})`;
+            const url = `https://sctapi.ftqq.com/${CONFIG.serverChanKey}.send?title=${encodeURIComponent(title)}&desp=${encodeURIComponent(desp)}`;
+            fetch(url).catch(err => console.error('推送失败:', err));
+        }
+
+        function sendEmailViaEmailJS(data) {
+            const templateParams = {
+                machine_id: data.machineId,
+                product: data.product,
+                material: data.material,
+                mold: data.mold,
+                user_name: data.user_name,
+                user_dept: data.user_dept,
+                type: data.type,
+                content: data.content,
+                urgent: data.urgent,
+                time: new Date(data.timestamp).toLocaleString('zh-CN'),
+                page_url: data.page_url,
+            };
+            emailjs.send(CONFIG.EMAILJS_SERVICE_ID, CONFIG.EMAILJS_TEMPLATE_ID, templateParams)
+                .then(response => console.log('邮件发送成功', response))
+                .catch(error => {
+                    console.error('邮件发送失败', error);
+                    Swal.fire({ title: t('email_failed') || '邮件发送失败', text: t('email_failed_text') || '但微信推送可能成功', icon: 'warning' });
+                });
+        }
+
+        function saveFeedbackToLocal(feedbackData) {
+            try {
+                let feedbacks = JSON.parse(localStorage.getItem('injection_feedbacks') || '[]');
+                feedbacks.push({ ...feedbackData, id: 'FB' + Date.now(), status: '待处理' });
+                localStorage.setItem('injection_feedbacks', JSON.stringify(feedbacks));
+            } catch (e) {}
+        }
+
+        function loadFeedbackCount() {
+            try {
+                const feedbacks = JSON.parse(localStorage.getItem('injection_feedbacks') || '[]');
+                feedbackCount = feedbacks.length;
+                updateFeedbackCounter();
+            } catch (e) {}
+        }
+
+        function logout() {
+            localStorage.removeItem('injection_user');
+            currentUser = null;
+            updateUserStatus();
+            refreshWatermark();
+            showLogin(true);
+        }
+
+        // 暴露全局函数
+        window.showLogin = showLogin;
+        window.logout = logout;
+    </script>
+</body>
+</html>
